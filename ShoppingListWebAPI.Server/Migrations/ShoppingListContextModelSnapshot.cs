@@ -38,7 +38,7 @@ namespace ShoppingListWebAPI.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("ShoppingListWebAPI.Server.Models.Product", b =>
@@ -63,7 +63,7 @@ namespace ShoppingListWebAPI.Server.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("ShoppingListWebAPI.Server.Models.Product", b =>

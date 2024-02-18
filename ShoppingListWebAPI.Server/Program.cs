@@ -5,6 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // SQL SERVER WITH THE RIGHT CONNECTION STRING AS A SECRET.
+var connectionString = builder.Configuration.GetConnectionString("ShoppingListContext");
+builder.Services.AddDbContext<ShoppingListContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter(); 
 
 builder.Services.AddControllers();

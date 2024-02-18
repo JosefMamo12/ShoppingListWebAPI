@@ -10,7 +10,7 @@ namespace ShoppingListWebAPI.Server.Models
         public int TotalQuantity { get; set; }
 
         // Navigation property to represent the one-to-many relationship
-        public  ICollection<Product>? Products { get; set;}
+        public virtual  ICollection<Product> Products { get; set;}
 
     }
 }

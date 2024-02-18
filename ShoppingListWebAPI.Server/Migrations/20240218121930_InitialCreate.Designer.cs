@@ -11,7 +11,7 @@ using ShoppingListWebAPI.Server.Data;
 namespace ShoppingListWebAPI.Server.Migrations
 {
     [DbContext(typeof(ShoppingListContext))]
-    [Migration("20240218082642_InitialCreate")]
+    [Migration("20240218121930_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -41,7 +41,7 @@ namespace ShoppingListWebAPI.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("ShoppingListWebAPI.Server.Models.Product", b =>
@@ -66,7 +66,7 @@ namespace ShoppingListWebAPI.Server.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("ShoppingListWebAPI.Server.Models.Product", b =>
