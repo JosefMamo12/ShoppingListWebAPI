@@ -1,4 +1,5 @@
-﻿import { Typography } from "@mui/material";
+﻿/* eslint-disable no-unused-vars */
+import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import { useTheme } from "@emotion/react";

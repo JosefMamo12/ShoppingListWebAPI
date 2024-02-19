@@ -12,17 +12,17 @@ namespace ShoppingListWebAPI.Server.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Category>().HasData(
-            new Category { Id = 1, Title = "חלב וביצים", TotalQuantity = 0 },
-            new Category { Id = 2, Title = "ירקות ופירות", TotalQuantity = 0 },
-            new Category { Id = 3, Title = "מוצרי ניקיון", TotalQuantity = 0 },
-            new Category { Id = 4, Title = "מאפים", TotalQuantity = 0 },
-            new Category { Id = 5, Title = "מוצרי חלב", TotalQuantity = 0 }
+            new Category { Id = 1, Name = "חלב וביצים", CategoryQuantity = 0 },
+            new Category { Id = 2, Name = "ירקות ופירות", CategoryQuantity = 0 },
+            new Category { Id = 3, Name = "מוצרי ניקיון", CategoryQuantity =  0 },
+            new Category { Id = 4, Name = "מאפים", CategoryQuantity = 0 },
+            new Category { Id = 5, Name = "מוצרי חלב", CategoryQuantity = 0 }
             );
 
             // Make Operation field unique
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.HasIndex(e => e.Title).IsUnique();
+                entity.HasIndex(e => e.Name).IsUnique();
             });
 
         }

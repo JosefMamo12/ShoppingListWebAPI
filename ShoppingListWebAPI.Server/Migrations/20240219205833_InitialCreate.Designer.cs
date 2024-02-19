@@ -11,8 +11,8 @@ using ShoppingListWebAPI.Server.Data;
 namespace ShoppingListWebAPI.Server.Migrations
 {
     [DbContext(typeof(ShoppingListContext))]
-    [Migration("20240218145241_SeedData")]
-    partial class SeedData
+    [Migration("20240219205833_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,16 +32,16 @@ namespace ShoppingListWebAPI.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Title")
+                    b.Property<int>("CategoryQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("TotalQuantity")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("Title")
+                    b.HasIndex("Name")
                         .IsUnique();
 
                     b.ToTable("Categories");
@@ -50,32 +50,32 @@ namespace ShoppingListWebAPI.Server.Migrations
                         new
                         {
                             Id = 1,
-                            Title = "חלב וביצים",
-                            TotalQuantity = 0
+                            CategoryQuantity = 0,
+                            Name = "חלב וביצים"
                         },
                         new
                         {
                             Id = 2,
-                            Title = "ירקות ופירות",
-                            TotalQuantity = 0
+                            CategoryQuantity = 0,
+                            Name = "ירקות ופירות"
                         },
                         new
                         {
                             Id = 3,
-                            Title = "מוצרי ניקיון",
-                            TotalQuantity = 0
+                            CategoryQuantity = 0,
+                            Name = "מוצרי ניקיון"
                         },
                         new
                         {
                             Id = 4,
-                            Title = "מאפים",
-                            TotalQuantity = 0
+                            CategoryQuantity = 0,
+                            Name = "מאפים"
                         },
                         new
                         {
                             Id = 5,
-                            Title = "מוצרי חלב",
-                            TotalQuantity = 0
+                            CategoryQuantity = 0,
+                            Name = "מוצרי חלב"
                         });
                 });
 

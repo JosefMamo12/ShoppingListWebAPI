@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
 import './App.css';
 import Header from './components/Header';
@@ -9,6 +10,7 @@ import { prefixer } from 'stylis';
 import rtlPlugin from 'stylis-plugin-rtl';
 import background from "./assets/background.png"
 import logo from "./assets/logo.png"
+import SearchBar from './components/SearchBar';
 function App() {
 
     const cacheRtl = createCache({
@@ -56,6 +58,7 @@ function App() {
                         >
                             <Box width="50%">
                                 <Header />
+                                <SearchBar/>
                             </Box>
                         </Box>
                     </Box>
