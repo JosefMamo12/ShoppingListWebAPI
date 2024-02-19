@@ -1,49 +1,68 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-
+import Header from './components/Header';
+import { CssBaseline, createTheme, ThemeProvider, Box } from '@mui/material'; // corrected import path
+import { green } from '@mui/material/colors'; // Import green color from Material-UI
+import { CacheProvider } from "@emotion/react";
+import createCache from '@emotion/cache';
+import { prefixer } from 'stylis';
+import rtlPlugin from 'stylis-plugin-rtl';
+import background from "./assets/background.png"
+import logo from "./assets/logo.png"
 function App() {
-    const [forecasts, setForecasts] = useState();
 
-    useEffect(() => {
-        populateWeatherData();
-    }, []);
-
-    const contents = forecasts === undefined
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-        : <table className="table table-striped" aria-labelledby="tabelLabel">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
-                </tr>
-            </thead>
-            <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>;
+    const cacheRtl = createCache({
+        key: "muirtl",
+        stylisPlugins: [prefixer, rtlPlugin]
+    })
+    const theme = createTheme({
+        palette: {
+            primary: {
+                main: green[500], // Use green color as the primary color
+            },
+            secondary: {
+                main: "#f44336",
+            },
+            background: {
+                main: "#f0f5f1", // A light background color
+            },
+        },
+        typography: {
+            fontFamily: "Arial, sans-serif", // Change the font family
+        },
+    });
 
     return (
-        <div>
-            <h1 id="tabelLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
-        </div>
+        <CacheProvider value={cacheRtl} >
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <div
+                    className="App"
+                    style={{
+                        direction: "rtl",
+                    }}
+                >
+                    <Box sx={{ background: `url(${background})`, margin: 0, padding: 0 }}>
+                        <img src={logo} alt="Logo" width="250px" height="200px" />
+                        <Box
+                            mx="auto" // Center the container horizontally
+                            sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                flexDirection: "column",
+                            }}
+                            p={2} // Add padding for spacing
+                        >
+                            <Box width="50%">
+                                <Header />
+                            </Box>
+                        </Box>
+                    </Box>
+                </div>
+            </ThemeProvider>
+        </CacheProvider>
     );
-    
-    async function populateWeatherData() {
-        const response = await fetch('weatherforecast');
-        const data = await response.json();
-        setForecasts(data);
-    }
 }
 
 export default App;
