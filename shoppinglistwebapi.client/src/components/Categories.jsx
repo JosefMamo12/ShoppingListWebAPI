@@ -1,15 +1,50 @@
 ﻿/* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
-import { Autocomplete, TextField } from "@mui/material";
+import React, { Fragment, useState, useCallback } from 'react';
+import { Autocomplete, TextField, CircularProgress } from "@mui/material";
 import { useEffect } from 'react';
 
-function Categories() {
-    const [categories, setCategories] = useState([]);
+// eslint-disable-next-line react/prop-types
+function Categories({ category, onCategoryChange }) {
+    const [options, setOptions] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    fetch('https://localhost:7263/api/Category')
-        .then(response => response.json())
-        .then(data => setCategories(data))
-        .catch(error => console.error('Unable to get items.', error));
+    const handleAutoCompleteChange = (event, newValue) => {
+        onCategoryChange(newValue);
+
+    };
+
+    useEffect(() => {
+        let active = true;
+
+        if (!loading) {
+            return undefined;
+        }
+
+        (async () => {
+            try {
+                const response = await fetch('https://localhost:7263/api/Category');
+                const data = await response.json();
+                if (active) {
+                    setOptions(data);
+                }
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            } finally {
+                setLoading(false);
+            }
+        })();
+
+        return () => {
+            active = false;
+        };
+    }, [loading]);
+
+    useEffect(() => {
+        if (!open) {
+            setOptions([]);
+        }
+    }, [open]);
 
     //const categories = [
     //    { "Id": 1, "Name": "חלב וביצים" },
@@ -18,25 +53,36 @@ function Categories() {
     //    { "Id": 4, "Name": "מאפים" },
     //    { "Id": 5, "Name": "מוצרי חלב" }
     //]
+
     return (
         <div style={{ direction: "rtl" }} className="App">
             <Autocomplete
-                autoHighlight
-                limitTags={2}
-                id="categories"
-                options={categories}
-                getOptionLabel={(option) => option.Name || " "}
-                defaultValue={[]}
-                name="category"
-                style={{ direction: "rtl", width: "300px" }}
+                onOpen={() => {
+                    setOpen(true);
+                    setLoading(true);
+                }}
+                onClose={() => {
+                    setOpen(false);
+                }}
+                getOptionLabel={(option) => option.name}
+                options={options}
+                loading={loading}
+                onChange={handleAutoCompleteChange}
                 renderInput={(params) => (
                     <TextField
-                        style={{ direction: "rtl", marginLeft: "30px" }}
+                        sx={{ minWidth: "300px" }}
                         {...params}
                         label="בחר קטגוריה"
-                        placeholder="בחר קטגוריה"
-                        fullWidth
-                        dir="rtl"
+                        InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                                <Fragment>
+                                    {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                                    {params.InputProps.endAdornment}
+                                </Fragment>
+                            ),
+                        }}
+
                     />
                 )}
             />

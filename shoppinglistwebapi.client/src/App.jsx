@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useState } from 'react';
 import './App.css';
 import Header from './components/Header';
 import { CssBaseline, createTheme, ThemeProvider, Box } from '@mui/material'; // corrected import path
@@ -11,6 +10,7 @@ import rtlPlugin from 'stylis-plugin-rtl';
 import background from "./assets/background.png"
 import logo from "./assets/logo.png"
 import SearchBar from './components/SearchBar';
+import ListsContainer from './components/ListsContainer';
 function App() {
 
     const cacheRtl = createCache({
@@ -42,6 +42,7 @@ function App() {
                     className="App"
                     style={{
                         direction: "rtl",
+
                     }}
                 >
                     <Box sx={{ background: `url(${background})`, margin: 0, padding: 0 }}>
@@ -58,10 +59,11 @@ function App() {
                         >
                             <Box width="50%">
                                 <Header />
-                                <SearchBar/>
+                                <SearchBar />
                             </Box>
                         </Box>
                     </Box>
+                    <ListsContainer/>
                 </div>
             </ThemeProvider>
         </CacheProvider>

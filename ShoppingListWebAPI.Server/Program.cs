@@ -9,9 +9,12 @@ internal class Program
 
         // Add services to the container.
         // SQL SERVER WITH THE RIGHT CONNECTION STRING AS A SECRET.
-  
+
         builder.Services.AddDbContext<ShoppingListContext>
-            (options => options.UseSqlServer(builder.Configuration.GetConnectionString("ShoppingList")));
+            (options => options.UseSqlServer(builder.Configuration.GetConnectionString("ShoppingList"))
+            .LogTo((msg)=>Console.WriteLine(msg),LogLevel.Information));
+
+
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
         builder.Services.AddControllers();
@@ -19,6 +22,12 @@ internal class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        builder.Services.AddCors(p => p.AddPolicy("corspolicy",
+             build =>
+             {
+                 build.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
+             }
+             ));
         var app = builder.Build();
 
         app.UseDefaultFiles();
@@ -30,6 +39,7 @@ internal class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+        app.UseCors("corspolicy");
 
         app.UseHttpsRedirection();
 

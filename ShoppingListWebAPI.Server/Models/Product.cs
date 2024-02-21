@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ShoppingListWebAPI.Server.Models
 
@@ -12,7 +13,7 @@ namespace ShoppingListWebAPI.Server.Models
         public int Quantity { get; set; }
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
-        public Category Category { get; set; } = null!;
+        public virtual Category Category { get; set; } = null!;
 
     }
 }
