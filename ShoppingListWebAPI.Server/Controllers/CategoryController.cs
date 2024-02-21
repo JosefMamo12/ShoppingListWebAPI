@@ -15,17 +15,10 @@ namespace ShoppingListWebAPI.Server.Controllers
             _context = context;
         }
         [HttpGet]
-        public async Task <ActionResult<Category>> Index()
+        public Category[] Get()
         {
-            try
-            {
-                var Categories = await _context.Categories.ToArrayAsync();
-                return Ok(Categories);
-            } catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
+            Category[] categories = [.. _context.Categories];
+            return categories;
         }
 
     }

@@ -5,12 +5,12 @@ import { useEffect } from 'react';
 
 function Categories() {
     const [categories, setCategories] = useState([]);
-
-    fetch('https://localhost:7263/api/Category')
-        .then(response => response.json())
-        .then(data => setCategories(data))
-        .catch(error => console.error('Unable to get items.', error));
-
+    useEffect(() => {
+        fetch('api/Category')
+            .then((response) => { return response.json() })
+            .then(data => setCategories(data))
+            .catch(error => console.error('Unable to get items.', error));
+    }, [])
     //const categories = [
     //    { "Id": 1, "Name": "חלב וביצים" },
     //    { "Id": 2, Name: "ירקות ופירות" },
