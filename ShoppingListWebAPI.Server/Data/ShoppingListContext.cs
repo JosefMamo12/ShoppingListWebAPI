@@ -16,7 +16,7 @@ namespace ShoppingListWebAPI.Server.Data
             new Category { Id = 2, Name = "ירקות ופירות", CategoryQuantity = 0 },
             new Category { Id = 3, Name = "מוצרי ניקיון", CategoryQuantity = 0 },
             new Category { Id = 4, Name = "מאפים", CategoryQuantity = 0 },
-            new Category { Id = 5, Name = "מוצרי חלב", CategoryQuantity = 0 }
+            new Category { Id = 5, Name = "בשר ודגים", CategoryQuantity = 0 }
             );
 
             // Make Operation field unique
