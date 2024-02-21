@@ -1,16 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useState } from 'react';
 import './App.css';
-import Header from './components/Header';
-import { CssBaseline, createTheme, ThemeProvider, Box } from '@mui/material'; // corrected import path
+
+import { CssBaseline, createTheme, ThemeProvider } from '@mui/material'; // corrected import path
 import { green } from '@mui/material/colors'; // Import green color from Material-UI
 import { CacheProvider } from "@emotion/react";
 import createCache from '@emotion/cache';
 import { prefixer } from 'stylis';
 import rtlPlugin from 'stylis-plugin-rtl';
-import background from "./assets/background.png"
-import logo from "./assets/logo.png"
-import SearchBar from './components/SearchBar';
+import Container from './components/Container';
 function App() {
 
     const cacheRtl = createCache({
@@ -38,31 +35,7 @@ function App() {
         <CacheProvider value={cacheRtl} >
             <ThemeProvider theme={theme}>
                 <CssBaseline />
-                <div
-                    className="App"
-                    style={{
-                        direction: "rtl",
-                    }}
-                >
-                    <Box sx={{ background: `url(${background})`, margin: 0, padding: 0 }}>
-                        <img src={logo} alt="Logo" width="250px" height="200px" />
-                        <Box
-                            mx="auto" // Center the container horizontally
-                            sx={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                flexDirection: "column",
-                            }}
-                            p={2} // Add padding for spacing
-                        >
-                            <Box width="50%">
-                                <Header />
-                                <SearchBar/>
-                            </Box>
-                        </Box>
-                    </Box>
-                </div>
+                <Container/>
             </ThemeProvider>
         </CacheProvider>
     );

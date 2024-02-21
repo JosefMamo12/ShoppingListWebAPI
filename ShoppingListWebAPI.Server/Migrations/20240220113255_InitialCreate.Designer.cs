@@ -11,7 +11,7 @@ using ShoppingListWebAPI.Server.Data;
 namespace ShoppingListWebAPI.Server.Migrations
 {
     [DbContext(typeof(ShoppingListContext))]
-    [Migration("20240219205833_InitialCreate")]
+    [Migration("20240220113255_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -37,12 +37,9 @@ namespace ShoppingListWebAPI.Server.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("Categories");
 

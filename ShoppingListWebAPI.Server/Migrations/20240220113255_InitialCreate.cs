@@ -18,7 +18,7 @@ namespace ShoppingListWebAPI.Server.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CategoryQuantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -58,12 +58,6 @@ namespace ShoppingListWebAPI.Server.Migrations
                     { 4, 0, "מאפים" },
                     { 5, 0, "מוצרי חלב" }
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Categories_Name",
-                table: "Categories",
-                column: "Name",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
