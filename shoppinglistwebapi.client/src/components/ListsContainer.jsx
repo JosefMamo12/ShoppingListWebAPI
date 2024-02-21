@@ -2,8 +2,16 @@ import { useTheme } from "@emotion/react";
 import { Divider, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import CategoryItemList from "./CategoryItemList";
+import { useEffect, useState } from "react";
 
-const ListsContainer = () => {
+const ListsContainer = ({ categories, setCategories }) => {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    fetch("https://localhost:7263/api/Product")
+      .then((response) => response.json())
+      .then((data) => setItems(data));
+  }, []);
   const theme = useTheme();
   return (
     <Box
@@ -20,9 +28,13 @@ const ListsContainer = () => {
         </Typography>
       </Box>
       <Divider sx={{ marginY: 2 }} />
-      
-        <CategoryItemList/>
-    
+
+      <CategoryItemList
+        categories={categories}
+        items={items}
+        setItems={setItems}
+        setCategories={setCategories}
+      />
     </Box>
   );
 };
