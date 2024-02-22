@@ -10,10 +10,15 @@ import {
 import React, { useEffect, useState } from "react";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import { useDispatch, useSelector } from "react-redux";
+import { decrementTotal, increamentTotal } from "../state/totalItemsSlice";
 
 const CustomListItem = ({ item, setItems, setCategories }) => {
   const [isRemoving, setIsRemoving] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+  const dispatch = useDispatch();
+  const totalItemsSelector = useSelector((state) => state.totalItems.value);
+
   const handleAdd = async () => {
     setIsAdding(true);
     // Add product
@@ -29,6 +34,8 @@ const CustomListItem = ({ item, setItems, setCategories }) => {
           ProductName: item.name,
         }),
       });
+
+      dispatch(increamentTotal());
       await fetch("https://localhost:7263/api/Product")
         .then((response) => response.json())
         .then((data) => setItems(data))
@@ -55,6 +62,7 @@ const CustomListItem = ({ item, setItems, setCategories }) => {
           ProductName: item.name,
         }),
       });
+      dispatch(decrementTotal());
       await fetch("https://localhost:7263/api/Product")
         .then((response) => response.json())
         .then((data) => setItems(data))

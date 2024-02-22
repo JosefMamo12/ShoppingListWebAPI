@@ -56,7 +56,7 @@ namespace ShoppingListWebAPI.Server.Migrations
                     { 2, 0, "ירקות ופירות" },
                     { 3, 0, "מוצרי ניקיון" },
                     { 4, 0, "מאפים" },
-                    { 5, 0, "מוצרי חלב" }
+                    { 5, 0, "בשר ודגים" }
                 });
 
             migrationBuilder.CreateIndex(

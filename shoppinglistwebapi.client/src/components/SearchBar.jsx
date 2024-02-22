@@ -1,4 +1,4 @@
-﻿/* eslint-disable no-unused-vars */
+﻿﻿/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import Categories from "./Categories";
 import {
@@ -9,12 +9,14 @@ import {
   useMediaQuery,
   Box,
 } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { increamentTotal } from "../state/totalItemsSlice";
 
-function SearchBar({ setCategories }) {
+function SearchBar({ setCategories, setItems }) {
   const [text, setText] = useState("");
   const [category, setCategory] = useState("");
   const [addItemFlag, setAddItemFlag] = useState(false);
-  const [fetchData, setFetchData] = useState(false);
+  const dispatch = useDispatch();
 
   const handleClick = async () => {
     if (!text || !category) {
@@ -26,7 +28,7 @@ function SearchBar({ setCategories }) {
 
     try {
       // Add product
-      await fetch("https://localhost:7263/api/Product", {
+      await fetch("https://localhost:7263/api/Product/add", {
         method: "POST",
         mode: "cors",
         headers: {
@@ -37,16 +39,18 @@ function SearchBar({ setCategories }) {
           ProductName: text,
         }),
       });
+      dispatch(increamentTotal());
 
       // Fetch updated list of products
-      const response = await fetch("https://localhost:7263/api/Category");
-      const data = await response.json();
-      console.log(data);
-      setCategories(data);
+      await fetch("https://localhost:7263/api/Product")
+        .then((response) => response.json())
+        .then((data) => setItems(data));
 
-      // Reset flag and clear input field
+      await fetch("https://localhost:7263/api/Category")
+        .then((response) => response.json())
+        .then((data) => setCategories(data));
+
       setAddItemFlag(false);
-      setText("");
     } catch (error) {
       console.error("Error:", error);
       setAddItemFlag(false);
