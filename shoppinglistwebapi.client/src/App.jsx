@@ -7,11 +7,10 @@ import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 import { prefixer } from "stylis";
 import rtlPlugin from "stylis-plugin-rtl";
-import Container from "./components/Container";
-import { useDispatch } from "react-redux";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import HomeContainer from "./pages/Home";
+import ListSummary from "./pages/ListSummary";
 function App() {
-
-    
   const cacheRtl = createCache({
     key: "muirtl",
     stylisPlugins: [prefixer, rtlPlugin],
@@ -34,12 +33,17 @@ function App() {
   });
 
   return (
-    <CacheProvider value={cacheRtl}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Container />
-      </ThemeProvider>
-    </CacheProvider>
+    <BrowserRouter>
+      <CacheProvider value={cacheRtl}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Routes>
+            <Route path="/" element={<HomeContainer />} />
+            <Route path="/summary" element={<ListSummary />} />
+          </Routes>
+        </ThemeProvider>
+      </CacheProvider>
+    </BrowserRouter>
   );
 }
 

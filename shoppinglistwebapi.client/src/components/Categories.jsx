@@ -46,13 +46,6 @@ function Categories({ category, onCategoryChange }) {
         }
     }, [open]);
 
-    //const categories = [
-    //    { "Id": 1, "Name": "חלב וביצים" },
-    //    { "Id": 2, Name: "ירקות ופירות" },
-    //    { "Id": 3, "Name": "מוצרי ניקיון" },
-    //    { "Id": 4, "Name": "מאפים" },
-    //    { "Id": 5, "Name": "מוצרי חלב" }
-    //]
 
     return (
         <div style={{ direction: "rtl" }} className="App">

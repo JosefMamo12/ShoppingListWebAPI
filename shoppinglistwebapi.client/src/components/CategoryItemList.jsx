@@ -10,8 +10,6 @@ import {
   Divider,
   Paper,
   useMediaQuery,
-  ListItem,
-  ListItemText,
 } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import styled from "@emotion/styled";
@@ -63,11 +61,12 @@ const CategoryItemList = ({ categories, items, setItems, setCategories }) => {
               </Typography>
               <Divider sx={{ marginTop: 1, marginBottom: 2 }} />
               <FireNav>
-                <List dense>
+                <List key={category.id} dense>
                   {items
                     .filter((item) => item.categoryId === category.id)
                     .map((item) => (
                       <CustomListItem
+                        key={item.id}
                         item={item}
                         setItems={setItems}
                         setCategories={setCategories}

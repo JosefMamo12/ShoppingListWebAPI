@@ -5,17 +5,44 @@ import {
   Button,
   CircularProgress,
   TextField,
-  Typography,
-  useMediaQuery,
   Box,
+  withStyles,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { increamentTotal } from "../state/totalItemsSlice";
+import styled from "styled-components";
+import MuiTextField from "@mui/material/TextField";
 
 function SearchBar({ setCategories, setItems }) {
+  const options = {
+    shouldForwardProp: (prop) => prop !== "borderColor",
+  };
+
+  const outlinedSelectors = [
+    "& .MuiOutlinedInput-notchedOutline",
+    "&:hover .MuiOutlinedInput-notchedOutline",
+    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline",
+  ];
+
+  const TextField = styled(
+    MuiTextField,
+    options
+  )(function (_ref) {
+    var borderColor = _ref.borderColor;
+    return {
+      "& label.Mui-focused": {
+        color: borderColor,
+      },
+      [outlinedSelectors.join(",")]: {
+        borderWidth: 3,
+        borderColor: borderColor,
+      },
+    };
+  });
   const [text, setText] = useState("");
   const [category, setCategory] = useState("");
   const [addItemFlag, setAddItemFlag] = useState(false);
+
   const dispatch = useDispatch();
 
   const handleClick = async () => {
@@ -72,7 +99,7 @@ function SearchBar({ setCategories, setItems }) {
           gap={2} // Add some space between elements
         >
           <TextField
-            sx={{ minWidth: "150px" }}
+            borderColor="white"
             id="outlined"
             variant="outlined"
             dir="rtl"
@@ -89,7 +116,8 @@ function SearchBar({ setCategories, setItems }) {
               color: "white",
               boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.1)", // Add a subtle box shadow
               border: "2px solid green",
-              minWidth: "150px",
+              minWidth: "200px",
+              fontSize: "23px",
             }}
             color="primary"
             disabled={addItemFlag}

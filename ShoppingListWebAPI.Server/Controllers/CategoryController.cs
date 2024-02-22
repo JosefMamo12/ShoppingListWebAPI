@@ -15,6 +15,7 @@ namespace ShoppingListWebAPI.Server.Controllers
             _context = context;
         }
         [HttpGet]
+
         public async Task<ActionResult<Category>> Index()
         {
             try
@@ -26,6 +27,7 @@ namespace ShoppingListWebAPI.Server.Controllers
             {
                 return BadRequest(ex.Message);
             }
+
 
         }
         [HttpGet]

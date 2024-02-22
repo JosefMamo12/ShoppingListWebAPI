@@ -5,12 +5,10 @@ import CategoryItemList from "./CategoryItemList";
 import { useEffect, useState } from "react";
 
 const ListsContainer = ({ setItems, items, categories, setCategories }) => {
-  
-
-  
   const theme = useTheme();
   return (
     <Box
+      width="90%"
       marginTop={5}
       className="lists container"
       padding={5}
@@ -22,20 +20,20 @@ const ListsContainer = ({ setItems, items, categories, setCategories }) => {
         <Typography variant="h5" color="primary" marginBottom={2}>
           מוצרים ברשימה על פי הקטגוריה המתאימה
         </Typography>
-      <Divider sx={{ marginY: 2 }} />
-          </Box>
-          {items.length > 0 ? <CategoryItemList
-              categories={categories}
-              items={items}
-              setItems={setItems}
-              setCategories={setCategories}
-          />
-              :
-          "הרשימה ריקה אנא מלא/י את הרשימה"
-          }
-          
-      </Box>
+        <Divider sx={{ marginY: 2 }} />
 
+        {items.length > 0 ? (
+          <CategoryItemList
+            categories={categories}
+            items={items}
+            setItems={setItems}
+            setCategories={setCategories}
+          />
+        ) : (
+          "הרשימה ריקה אנא מלא/י את הרשימה"
+        )}
+      </Box>
+    </Box>
   );
 };
 
