@@ -2,7 +2,6 @@
 import "./App.css";
 
 import { CssBaseline, createTheme, ThemeProvider } from "@mui/material"; // corrected import path
-import { green } from "@mui/material/colors"; // Import green color from Material-UI
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 import { prefixer } from "stylis";
@@ -18,17 +17,21 @@ function App() {
   const theme = createTheme({
     palette: {
       primary: {
-        main: green[500], // Use green color as the primary color
+        main: "#ffffff", // Use green color as the primary color
       },
       secondary: {
-        main: "#f44336",
+        main: "#172633",
       },
       background: {
-        main: "#f0f5f1", // A light background color
+        main: "#afefb9", // A light background color
       },
     },
     typography: {
       fontFamily: "Arial, sans-serif", // Change the font family
+    },
+    componentsDesign: {
+      borderRadius: "10px",
+      border: "2px solid #172633",
     },
   });
 
@@ -39,7 +42,7 @@ function App() {
           <CssBaseline />
           <Routes>
             <Route path="/" element={<HomeContainer />} />
-            <Route path="/summary" element={<ListSummary />} />
+            <Route path="/summary" element={<ListSummary />} action={} />
           </Routes>
         </ThemeProvider>
       </CacheProvider>

@@ -6,45 +6,22 @@ import {
   CircularProgress,
   TextField,
   Box,
-  withStyles,
+  useMediaQuery,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { increamentTotal } from "../state/totalItemsSlice";
-import styled from "styled-components";
-import MuiTextField from "@mui/material/TextField";
+import { useDispatch } from "react-redux";
+import { incrementTotal } from "../state/totalItemsSlice";
+import { useTheme } from "@emotion/react";
+import { match } from "stylis";
 
 function SearchBar({ setCategories, setItems }) {
-  const options = {
-    shouldForwardProp: (prop) => prop !== "borderColor",
-  };
-
-  const outlinedSelectors = [
-    "& .MuiOutlinedInput-notchedOutline",
-    "&:hover .MuiOutlinedInput-notchedOutline",
-    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline",
-  ];
-
-  const TextField = styled(
-    MuiTextField,
-    options
-  )(function (_ref) {
-    var borderColor = _ref.borderColor;
-    return {
-      "& label.Mui-focused": {
-        color: borderColor,
-      },
-      [outlinedSelectors.join(",")]: {
-        borderWidth: 3,
-        borderColor: borderColor,
-      },
-    };
-  });
   const [text, setText] = useState("");
   const [category, setCategory] = useState("");
   const [addItemFlag, setAddItemFlag] = useState(false);
+  const [width, setWidth] = useState("row");
+  const theme = useTheme();
 
   const dispatch = useDispatch();
-
+  const matches = useMediaQuery(theme.breakpoints.down("lg"));
   const handleClick = async () => {
     if (!text || !category) {
       console.log("Please fill both fields");
@@ -66,7 +43,7 @@ function SearchBar({ setCategories, setItems }) {
           ProductName: text,
         }),
       });
-      dispatch(increamentTotal());
+      dispatch(incrementTotal());
 
       // Fetch updated list of products
       await fetch("https://localhost:7263/api/Product")
@@ -90,41 +67,38 @@ function SearchBar({ setCategories, setItems }) {
         display="flex"
         alignItems="center"
         justifyContent="center"
+        flexDirection={matches ? "column" : "row"}
         gap={2} // Add some space between elements
       >
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          gap={2} // Add some space between elements
+        <TextField
+          id="outlined"
+          variant="outlined"
+          dir="rtl"
+          label="רשום מוצר"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          sx={{
+            minWidth: "200px",
+            backgroundColor: "white",
+            borderRadius: theme.componentsDesign.borderRadius,
+          }}
+        />
+        <Categories category={category} onCategoryChange={setCategory} />
+        <Button
+          onClick={handleClick}
+          variant="contained"
+          sx={{
+            borderRadius: theme.componentsDesign.borderRadius,
+            color: "black",
+            boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.1)", // Add a subtle box shadow
+            minWidth: "200px",
+            fontSize: "23px",
+          }}
+          color="primary"
+          disabled={addItemFlag}
         >
-          <TextField
-            borderColor="white"
-            id="outlined"
-            variant="outlined"
-            dir="rtl"
-            label="רשום מוצר"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
-          <Categories category={category} onCategoryChange={setCategory} />
-          <Button
-            onClick={handleClick}
-            variant="contained"
-            sx={{
-              borderRadius: "10px",
-              color: "white",
-              boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.1)", // Add a subtle box shadow
-              border: "2px solid green",
-              minWidth: "200px",
-              fontSize: "23px",
-            }}
-            color="primary"
-            disabled={addItemFlag}
-          >
-            {addItemFlag ? <CircularProgress /> : "הוסף מוצר"}
-          </Button>
-        </Box>
+          {addItemFlag ? <CircularProgress /> : "הוסף מוצר"}
+        </Button>
       </Box>
     </Box>
   );
