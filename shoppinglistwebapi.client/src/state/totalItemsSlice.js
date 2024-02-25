@@ -35,7 +35,7 @@ const totalItemsSlice = createSlice({
   name: "totalItems",
   initialState,
   reducers: {
-    increamentTotal(state, action) {
+    incrementTotal(state, action) {
       state.value += 1;
     },
     decrementTotal(state, action) {

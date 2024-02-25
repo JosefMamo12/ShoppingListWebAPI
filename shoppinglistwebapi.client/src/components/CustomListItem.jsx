@@ -11,12 +11,14 @@ import React, { useEffect, useState } from "react";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch } from "react-redux";
-import { decrementTotal, increamentTotal } from "../state/totalItemsSlice";
+import { decrementTotal, incrementTotal } from "../state/totalItemsSlice";
+import { useTheme } from "@emotion/react";
 
 const CustomListItem = ({ id, item, setItems, setCategories }) => {
   const [isRemoving, setIsRemoving] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   const handleAdd = async () => {
     setIsAdding(true);
@@ -34,7 +36,7 @@ const CustomListItem = ({ id, item, setItems, setCategories }) => {
         }),
       });
 
-      dispatch(increamentTotal());
+      dispatch(incrementTotal());
       await fetch("https://localhost:7263/api/Product")
         .then((response) => response.json())
         .then((data) => setItems(data))

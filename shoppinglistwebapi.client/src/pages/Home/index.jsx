@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import background from "../../assets/background.png";
 import logo from "../../assets/logo.png";
 import SearchBar from "../../components/SearchBar";
@@ -18,7 +18,7 @@ const HomeContainer = () => {
 
   useEffect(() => {
     dispatch(fetchTotalItems({}));
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     fetch("https://localhost:7263/api/Product")
@@ -42,17 +42,19 @@ const HomeContainer = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        marginTop: "30px",
       }}
     >
       <Box
         sx={{
-          background: `url(${background})`,
+          background: theme.palette.background.main,
           margin: 0,
           padding: 0,
           width: "90%",
+          borderRadius: theme.componentsDesign.borderRadius,
         }}
       >
-        <img src={logo} alt="Logo" width="250px" height="200px" />
+        <img src={logo} alt="Logo" width="250px" height="175px" />
         <Box
           mx="auto" // Center the container horizontally
           sx={{
@@ -67,8 +69,19 @@ const HomeContainer = () => {
             <Header />
             <SearchBar setCategories={setCategories} setItems={setItems} />
           </Box>
-          <Box padding={5}>
-            {"כמות המוצרים ברשימה: " + selectorTotalItems.value}
+          <Box
+            padding={5}
+            marginTop={5}
+            marginBottom={5}
+            sx={{
+              borderRadius: theme.componentsDesign.borderRadius,
+              background: theme.palette.primary.main,
+              boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <Typography component="h2" variant="h4">
+              {"כמות המוצרים ברשימה: " + selectorTotalItems.value}
+            </Typography>
           </Box>
         </Box>
       </Box>
@@ -81,13 +94,15 @@ const HomeContainer = () => {
       <Box padding={10}>
         <Button
           variant="contained"
+          onClick={e => e.}
           sx={{
             width: "300px",
             height: "50px",
             borderRadius: "10px",
             backgroundColor: theme.palette.primary.main,
-            color: "white",
-            fontSize: "30px"
+            color: "black",
+            fontSize: "30px",
+
           }}
         >
           {" "}
