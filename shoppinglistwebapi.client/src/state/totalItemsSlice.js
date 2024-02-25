@@ -75,5 +75,5 @@ const totalItemsSlice = createSlice({
       //};
   },
 });
-export const { increamentTotal, decrementTotal } = totalItemsSlice.actions;
+export const { incrementTotal, decrementTotal } = totalItemsSlice.actions;
 export default totalItemsSlice.reducer;
