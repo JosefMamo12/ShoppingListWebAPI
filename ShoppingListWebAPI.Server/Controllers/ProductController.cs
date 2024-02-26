@@ -18,7 +18,7 @@ namespace ShoppingListWebAPI.Server.Controllers
         {
             _context = context;
         }
-     
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> Products()
         {
@@ -38,7 +38,7 @@ namespace ShoppingListWebAPI.Server.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [Route ("subtract")]
+        [Route("subtract")]
         [HttpPost]
         public async Task<ActionResult> SubtractProduct(DTOProduct p)
         {
@@ -100,7 +100,7 @@ namespace ShoppingListWebAPI.Server.Controllers
                 await _context.SaveChangesAsync();
                 transaction.Commit();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -114,9 +114,34 @@ namespace ShoppingListWebAPI.Server.Controllers
                 category.CategoryQuantity++;
             }
         }
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            try
+            {
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+                if (product != null)
+                {
+                    var transaction = _context.Database.BeginTransaction();
+                    _context.Products.Remove(product);
+                    var category = _context.Categories.FirstOrDefault(c => c.Id == product.CategoryId);
+                    if (category != null)
+                    {
+                        category.CategoryQuantity -= product.Quantity;
+                    }
+                    transaction.Commit();
+                    _context.SaveChanges();
+                    return Ok("Successed remove product");
+                }
+
+                return Ok("Not found the product");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
     }
 
 }
-
-
-
