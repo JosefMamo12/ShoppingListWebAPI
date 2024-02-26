@@ -69,7 +69,7 @@ namespace ShoppingListWebAPI.Server.Migrations
                         {
                             Id = 5,
                             CategoryQuantity = 0,
-                            Name = "מוצרי חלב"
+                            Name = "בשר ודגים"
                         });
                 });
 
