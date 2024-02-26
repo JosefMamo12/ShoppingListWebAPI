@@ -11,7 +11,6 @@ import {
 import { useDispatch } from "react-redux";
 import { incrementTotal } from "../state/totalItemsSlice";
 import { useTheme } from "@emotion/react";
-import { match } from "stylis";
 
 function SearchBar({ setCategories, setItems }) {
   const [text, setText] = useState("");
@@ -62,7 +61,12 @@ function SearchBar({ setCategories, setItems }) {
   };
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center">
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+
+    >
       <Box
         display="flex"
         alignItems="center"

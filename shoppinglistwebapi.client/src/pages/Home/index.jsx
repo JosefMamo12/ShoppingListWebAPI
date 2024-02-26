@@ -8,6 +8,7 @@ import Header from "../../components/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTotalItems } from "../../state/totalItemsSlice";
 import { useTheme } from "@emotion/react";
+import { Link } from "react-router-dom";
 
 const HomeContainer = () => {
   const [categories, setCategories] = useState([]);
@@ -45,6 +46,9 @@ const HomeContainer = () => {
         marginTop: "30px",
       }}
     >
+      <Box padding={5} width="100%">
+        <Header label="רשימת קניות" />
+      </Box>
       <Box
         sx={{
           background: theme.palette.background.main,
@@ -52,9 +56,9 @@ const HomeContainer = () => {
           padding: 0,
           width: "90%",
           borderRadius: theme.componentsDesign.borderRadius,
+          boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <img src={logo} alt="Logo" width="250px" height="175px" />
         <Box
           mx="auto" // Center the container horizontally
           sx={{
@@ -65,8 +69,7 @@ const HomeContainer = () => {
           }}
           p={2} // Add padding for spacing
         >
-          <Box width="50%">
-            <Header />
+          <Box>
             <SearchBar setCategories={setCategories} setItems={setItems} />
           </Box>
           <Box
@@ -94,7 +97,6 @@ const HomeContainer = () => {
       <Box padding={10}>
         <Button
           variant="contained"
-          onClick={e => e.}
           sx={{
             width: "300px",
             height: "50px",
@@ -102,11 +104,9 @@ const HomeContainer = () => {
             backgroundColor: theme.palette.primary.main,
             color: "black",
             fontSize: "30px",
-
           }}
         >
-          {" "}
-          סיכום הרשימה{" "}
+          <Link to="/summary">סיכום הרשימה</Link>
         </Button>
       </Box>
     </div>

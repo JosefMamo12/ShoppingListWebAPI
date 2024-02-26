@@ -1,1 +1,13 @@
-﻿
+﻿.App{
+    background-color: #fefefe;
+    width: 100%
+}
+body{
+    margin: 0;
+}
+.anta-regular {
+    font-family: "Anta", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+  

@@ -4,7 +4,7 @@ import { Box } from "@mui/system";
 import React from "react";
 import { useTheme } from "@emotion/react";
 
-const Header = () => {
+const Header = ({ label }) => {
   const theme = useTheme();
   return (
     <Box
@@ -24,7 +24,7 @@ const Header = () => {
         component="h2"
         color={theme.palette.secondary.main}
       >
-        רשימת קניות
+        {label}
       </Typography>
     </Box>
   );

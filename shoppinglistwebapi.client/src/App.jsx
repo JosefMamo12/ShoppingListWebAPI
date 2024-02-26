@@ -9,6 +9,7 @@ import rtlPlugin from "stylis-plugin-rtl";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomeContainer from "./pages/Home";
 import ListSummary from "./pages/ListSummary";
+import Layout from "./pages/Layout";
 function App() {
   const cacheRtl = createCache({
     key: "muirtl",
@@ -23,7 +24,7 @@ function App() {
         main: "#172633",
       },
       background: {
-        main: "#afefb9", // A light background color
+        main: "#faf9f9", // A light background color
       },
     },
     typography: {
@@ -36,17 +37,20 @@ function App() {
   });
 
   return (
-    <BrowserRouter>
+    <div className="App">
       <CacheProvider value={cacheRtl}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
+
           <Routes>
-            <Route path="/" element={<HomeContainer />} />
-            <Route path="/summary" element={<ListSummary />} action={} />
+            <Route path="/" element={<Layout />}>
+              <Route path="/" element={<HomeContainer />} />
+              <Route path="/summary" element={<ListSummary />} />
+            </Route>
           </Routes>
         </ThemeProvider>
       </CacheProvider>
-    </BrowserRouter>
+    </div>
   );
 }
 
