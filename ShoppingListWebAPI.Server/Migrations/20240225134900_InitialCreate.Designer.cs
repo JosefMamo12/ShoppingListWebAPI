@@ -11,7 +11,7 @@ using ShoppingListWebAPI.Server.Data;
 namespace ShoppingListWebAPI.Server.Migrations
 {
     [DbContext(typeof(ShoppingListContext))]
-    [Migration("20240220113255_InitialCreate")]
+    [Migration("20240225134900_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -72,7 +72,7 @@ namespace ShoppingListWebAPI.Server.Migrations
                         {
                             Id = 5,
                             CategoryQuantity = 0,
-                            Name = "מוצרי חלב"
+                            Name = "בשר ודגים"
                         });
                 });
 

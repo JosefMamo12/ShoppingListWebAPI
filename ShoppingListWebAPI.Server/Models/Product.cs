@@ -12,7 +12,6 @@ namespace ShoppingListWebAPI.Server.Models
         public string Name { get; set; } = null!;
         public int Quantity { get; set; }
         public int CategoryId { get; set; }
-        [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; } = null!;
 
     }

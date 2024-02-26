@@ -20,16 +20,30 @@ namespace ShoppingListWebAPI.Server.Controllers
         {
             try
             {
-                var Categories = await _context.Categories.ToArrayAsync();
+                var Categories = await _context.Categories.ToListAsync();
                 return Ok(Categories);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-
-
         }
+
+        [HttpGet]
+        [Route("products")]
+        public async Task<ActionResult<Category>> CategoriesProducts()
+        {
+            try
+            {
+                var Categories = await _context.Categories.Select(c => new { c.Name, c.Products }).ToListAsync();
+                return Ok(Categories);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet]
         [Route("sum")]
         public ActionResult<int> CategoriesSum()
