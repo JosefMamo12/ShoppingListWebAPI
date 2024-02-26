@@ -78,10 +78,14 @@ const CustomListItem = ({ id, item, setItems, setCategories }) => {
 
   return (
     <ListItem id={id} sx={{ borderBottom: "1px solid #A5E9C7" }}>
-      <ListItemText primary={item.name} />
+      <ListItemText
+        primary={item.name}
+        primaryTypographyProps={{ fontSize: "20px" }}
+        sx={{paddingRight: "10px"}}
+      />
       <IconButton
         aria-label="add"
-        size="small"
+        size="md"
         onClick={() => handleAdd()}
         disabled={isAdding}
       >
@@ -89,7 +93,7 @@ const CustomListItem = ({ id, item, setItems, setCategories }) => {
       </IconButton>
       <IconButton
         aria-label="add"
-        size="small"
+        size="md"
         onClick={() => handleSubtract(item)}
         disabled={isRemoving}
       >
@@ -97,7 +101,7 @@ const CustomListItem = ({ id, item, setItems, setCategories }) => {
       </IconButton>
 
       <ListItemSecondaryAction>
-        <Typography variant="body2">{item.quantity + "x"} </Typography>
+        <Typography variant="body6">{item.quantity + "x"} </Typography>
       </ListItemSecondaryAction>
     </ListItem>
   );

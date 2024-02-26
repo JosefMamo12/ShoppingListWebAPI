@@ -28,7 +28,7 @@ function App() {
       },
     },
     typography: {
-      fontFamily: "Arial, sans-serif", // Change the font family
+      fontFamily: "Heebo, sans-serif", // Change the font family
     },
     componentsDesign: {
       borderRadius: "10px",
