@@ -42,7 +42,7 @@ const totalItemsSlice = createSlice({
       state.value -= 1;
     },
     decrementTotalByValue(state, action) {
-      state -= action.payload;
+      state.value -= action.payload;
     },
   },
   extraReducers: (builder) => {

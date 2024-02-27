@@ -1,6 +1,4 @@
 import { Box, Button, Typography } from "@mui/material";
-import background from "../../assets/background.png";
-import logo from "../../assets/logo.png";
 import SearchBar from "../../components/SearchBar";
 import ListsContainer from "../../components/ListsContainer";
 import React, { useState, useEffect } from "react";

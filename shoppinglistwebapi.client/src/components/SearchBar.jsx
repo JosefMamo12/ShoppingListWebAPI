@@ -16,8 +16,7 @@ function SearchBar({ setCategories, setItems }) {
   const [text, setText] = useState("");
   const [category, setCategory] = useState("");
   const [addItemFlag, setAddItemFlag] = useState(false);
-  const [width, setWidth] = useState("row");
-  const theme = useTheme();
+    const theme = useTheme();
 
   const dispatch = useDispatch();
   const matches = useMediaQuery(theme.breakpoints.down("lg"));

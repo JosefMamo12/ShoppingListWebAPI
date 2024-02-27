@@ -11,11 +11,7 @@ using ShoppingListWebAPI.Server.Data;
 namespace ShoppingListWebAPI.Server.Migrations
 {
     [DbContext(typeof(ShoppingListContext))]
-<<<<<<<< HEAD:ShoppingListWebAPI.Server/Migrations/20240223125611_InitialCreate.Designer.cs
-    [Migration("20240223125611_InitialCreate")]
-========
-    [Migration("20240225134900_InitialCreate")]
->>>>>>>> 903f05490efd57c9349cce8a67a3e0fa50eb402c:ShoppingListWebAPI.Server/Migrations/20240225134900_InitialCreate.Designer.cs
+    [Migration("20240226205537_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
