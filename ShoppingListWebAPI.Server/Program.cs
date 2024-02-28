@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using ShoppingListWebAPI.Server.Data;
+using System.Text.Json.Serialization;
 
 internal class Program
 {
@@ -12,12 +14,16 @@ internal class Program
 
         builder.Services.AddDbContext<ShoppingListContext>
             (options => options.UseSqlServer(builder.Configuration.GetConnectionString("ShoppingList"))
-            .LogTo((msg)=>Console.WriteLine(msg),LogLevel.Information));
+            .LogTo((msg) => Console.WriteLine(msg), LogLevel.Information));
 
 
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-        builder.Services.AddControllers();
+        builder.Services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            options.JsonSerializerOptions.WriteIndented = true;
+        }
+        );
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();

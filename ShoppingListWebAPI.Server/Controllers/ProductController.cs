@@ -114,6 +114,15 @@ namespace ShoppingListWebAPI.Server.Controllers
                 category.CategoryQuantity++;
             }
         }
+
+        private void UpdateCategory(int categoryId, int prevProductQuantity, int updatedProductquantity)
+        {
+            var category = _context.Categories.FirstOrDefault(c => c.Id == categoryId);
+            if (category != null)
+            {
+                category.CategoryQuantity = category.CategoryQuantity - prevProductQuantity + updatedProductquantity;
+            }
+        }
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
@@ -141,6 +150,52 @@ namespace ShoppingListWebAPI.Server.Controllers
                 return BadRequest(ex.Message);
             }
 
+        }
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<Product>> UpdateProduct(int id, DTOEdit dTOEdit)
+        {
+            try
+            {
+
+                var productToUpdate = _context.Products.FirstOrDefault(p => p.Id == id);
+                if (productToUpdate == null)
+                {
+                    return NotFound($"Product with Id = {id} not found");
+                }
+
+                if (dTOEdit.Name != null && dTOEdit.Name.Length > 0)
+                {
+                    productToUpdate.Name = dTOEdit.Name;
+                }
+                if (dTOEdit.Quantity != 0)
+                {
+                    var transaction = _context.Database.BeginTransaction();
+                    try
+                    {
+                        Console.WriteLine(productToUpdate.Quantity);
+                        int prevProductQuantity = productToUpdate.Quantity;
+                        productToUpdate.Quantity = dTOEdit.Quantity;
+                        UpdateCategory(productToUpdate.CategoryId, prevProductQuantity, dTOEdit.Quantity);
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        return BadRequest($"Failed to execute trnasction: {ex.Message}");
+                    }
+
+
+                }
+
+                await _context.SaveChangesAsync();
+                return Ok(productToUpdate);
+            }
+            catch (Exception)
+            {
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError,
+                        "Error updating data");
+                }
+            }
         }
     }
 

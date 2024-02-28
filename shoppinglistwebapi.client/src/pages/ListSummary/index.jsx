@@ -15,28 +15,26 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  decrementTotalByValue,
+  changeTotalItemsByValue,
   fetchTotalItems,
+  selectTotalItems,
 } from "../../state/totalItemsSlice";
 import EditDialog from "../../components/EditDialog";
+import {
+  fetchCategoriesProducts,
+  selectCategoriesProducts,
+} from "../../state/listSummarySlice";
 
 const ListSummary = () => {
-  const [categoriesProducts, setCategoriesProducts] = useState([]);
   const theme = useTheme();
-  const totalItemsSelector = useSelector((state) => state.totalItems);
   const dispatch = useDispatch();
+  const totalItemsSelector = useSelector(selectTotalItems);
+  const categoriesProducts = useSelector(selectCategoriesProducts);
   const [openEditDialogs, setOpenEditDialogs] = useState([]); // State to manage open/close state for edit dialogs
 
   useEffect(() => {
-    async function getData() {
-      const products = await api.get("api/Category/products");
-      setCategoriesProducts(products.data);
-    }
-    async function getTotalItems() {
-      dispatch(fetchTotalItems({}));
-    }
-    getData();
-    getTotalItems();
+    dispatch(fetchCategoriesProducts({}));
+    dispatch(fetchTotalItems({}));
   }, [dispatch]);
 
   async function handleRemoveClick(product) {
@@ -45,12 +43,12 @@ const ListSummary = () => {
     } catch (error) {
       console.log(error);
     }
-    const products = await api.get("api/Category/products");
-    dispatch(decrementTotalByValue(product.quantity));
-    setCategoriesProducts(products.data);
+    dispatch(changeTotalItemsByValue(-product.quantity));
+    dispatch(fetchCategoriesProducts());
   }
 
   const handleEditClick = (index) => {
+    console.log(index);
     // Open the edit dialog for the corresponding product
     const newOpenEditDialogs = [...openEditDialogs];
     newOpenEditDialogs[index] = true;
@@ -65,39 +63,45 @@ const ListSummary = () => {
   };
 
   return (
+  
     <Box>
-      <nav aria-label="main">
-        {totalItemsSelector.value === 0 ? (
+      {totalItemsSelector.value === 0 ? (
+        <Box display="flex" justifyContent="center">
           <Typography p={5} variant="h3">
             {" "}
             רשימת הקניות ריקה אנא חזור לעמוד הבית ומלא אותה{" "}
           </Typography>
-        ) : (
-          categoriesProducts
-            .filter((categories) => categories.products.length > 0)
-            .map((category) => (
-              <Box
-                key={category.name}
-                p={5}
-                m={1}
-                display="flex"
-                flexDirection="column"
-                justifyContent="space-between" // this won't affect vertical spacing
-                sx={{
-                  backgroundColor: theme.palette.background.main,
-                  width: "90%",
-                }}
-              >
-                <Box display="flex" width="100%" justifyContent="center" mb={1}>
-                  <Typography variant="h5">{category.name}</Typography>
-                </Box>
-                <Divider sx={{ width: "100%", border: "1px solid black" }} />
-                <List>
-                  {category.products.map((product, index) => {
-                    return (
-                      <ListItem key={product.id} disablePadding>
+        </Box>
+      ) : (
+        categoriesProducts
+          .filter((categories) => categories.products.length > 0)
+          .map((category) => (
+            <Box
+              key={category.name}
+              p={5}
+              m={4}
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-between" // this won't affect vertical spacing
+              sx={{
+                backgroundColor: theme.palette.background.main,
+              }}
+            >
+              <Box display="flex" width="100%" justifyContent="center">
+                <Typography variant="h5">{category.name}</Typography>
+              </Box>
+              <Divider sx={{ width: "100%", border: "1px solid black" }} />
+              <List>
+                {category.products.map((product, index) => {
+                  return (
+                    <ListItem key={product.id} disablePadding>
+                      <Box width="100%">
                         <ListItemText primary={product.name} />
+                      </Box>
+                      <Box width="100%" marginLeft={7}>
                         <ListItemText primary={product.quantity} />
+                      </Box>
+                      <Box display="flex">
                         <IconButton onClick={() => handleEditClick(index)}>
                           <EditIcon />
                         </IconButton>
@@ -107,17 +111,18 @@ const ListSummary = () => {
                           <DeleteIcon />
                         </IconButton>
                         <EditDialog
+                          productId={product.id}
                           open={openEditDialogs[index] || false} // Pass the open state for the corresponding edit dialog
                           setOpen={(isOpen) => handleCloseEditDialog(index)}
                         />
-                      </ListItem>
-                    );
-                  })}
-                </List>
-              </Box>
-            ))
-        )}
-      </nav>
+                      </Box>
+                    </ListItem>
+                  );
+                })}
+              </List>
+            </Box>
+          ))
+      )}
     </Box>
   );
 };

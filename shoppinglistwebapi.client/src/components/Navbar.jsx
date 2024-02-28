@@ -17,7 +17,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-
 const drawerWidth = 240;
 const navItems = [
   { id: 1, link: "/", label: "עמוד בית" },
@@ -35,7 +34,7 @@ function Navbar(props) {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
+        רשימת קניות
       </Typography>
       <Divider />
       <List>
@@ -58,7 +57,12 @@ function Navbar(props) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar dir="rtl" component="nav" sx={{ backgroundColor: "#384ac2" }} position="sticky">
+      <AppBar
+        dir="rtl"
+        component="nav"
+        sx={{ backgroundColor: "#384ac2" }}
+        position="sticky"
+      >
         <Toolbar>
           <IconButton
             color="inherit"
@@ -72,7 +76,7 @@ function Navbar(props) {
           <Box sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
             <img src={logo} alt="Logo" width="250px" height="175px" />
           </Box>
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+          <Box sx={{ display: { xs: "none", sm: "block" }}}>
             {navItems.map((item) => (
               <Button key={item.id}>
                 <Link to={item.link}>
@@ -89,6 +93,7 @@ function Navbar(props) {
           </Box>
         </Toolbar>
       </AppBar>
+      <Toolbar />
       <nav>
         <Drawer
           container={container}

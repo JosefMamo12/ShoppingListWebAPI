@@ -7,15 +7,37 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
+import api from "../api";
+import { useDispatch } from "react-redux";
+import { changeTotalItemsByValue } from "../state/totalItemsSlice";
+import { fetchCategoriesProducts } from "../state/listSummarySlice";
 
-const EditDialog = ({ open, setOpen }) => {
+const EditDialog = ({ productId, open, setOpen }) => {
   const handleClose = () => {
-
     setOpen(false);
     console.log(open);
   };
+
+  const handleSubmit = async () => {
+    if (productName != null || productQuantity != null) {
+      console.log(`Name: ${productName} Quantity: ${productQuantity} `);
+      await api.put(`api/Product/${productId}`, {
+        Name: productName,
+        Quantity: productQuantity,
+      });
+      dispatch(changeTotalItemsByValue(productQuantity));
+      const response = await api.get("api/Category/products");
+      dispatch(fetchCategoriesProducts());
+      handleClose();
+    }
+  };
   console.log("Render EditDialog");
+  console.log(productId);
+
+  const dispatch = useDispatch();
+  const [productName, setProudctName] = useState("");
+  const [productQuantity, setProductQuantity] = useState(0);
 
   return (
     <Dialog
@@ -24,14 +46,6 @@ const EditDialog = ({ open, setOpen }) => {
       onClose={handleClose}
       PaperProps={{
         component: "form",
-        onSubmit: (event) => {
-          event.preventDefault();
-          const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries(formData.entries());
-          const email = formJson.email;
-          console.log(email);
-          handleClose();
-        },
       }}
     >
       <DialogTitle>ערוך מוצר</DialogTitle>
@@ -41,8 +55,8 @@ const EditDialog = ({ open, setOpen }) => {
         </DialogContentText>
         <TextField
           autoFocus
-          required
           margin="dense"
+          onChange={(e) => setProudctName(e.target.value)}
           id="name"
           name="productName"
           label="שם המוצר"
@@ -52,9 +66,9 @@ const EditDialog = ({ open, setOpen }) => {
         />
         <TextField
           autoFocus
-          required
           margin="dense"
           id="quantity"
+          onChange={(e) => setProductQuantity(e.target.value)}
           name="productQuantity"
           label="כמות המוצר"
           type="number"
@@ -66,7 +80,7 @@ const EditDialog = ({ open, setOpen }) => {
         <Button sx={{ color: "black" }} onClick={handleClose}>
           בטל
         </Button>
-        <Button sx={{ color: "black" }} type="submit">
+        <Button sx={{ color: "black" }} onClick={handleSubmit}>
           ערוך
         </Button>
       </DialogActions>
