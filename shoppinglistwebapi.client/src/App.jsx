@@ -15,7 +15,9 @@ function App() {
     key: "muirtl",
     stylisPlugins: [prefixer, rtlPlugin],
   });
+
   const theme = createTheme({
+    direction: "rtl",
     palette: {
       primary: {
         main: "#ffffff", // Use green color as the primary color
@@ -41,7 +43,6 @@ function App() {
       <CacheProvider value={cacheRtl}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route path="/" element={<HomeContainer />} />

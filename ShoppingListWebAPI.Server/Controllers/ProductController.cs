@@ -115,7 +115,7 @@ namespace ShoppingListWebAPI.Server.Controllers
             }
         }
 
-        private void UpdateCategory(int categoryId, int prevProductQuantity, int updatedProductquantity)
+        private void UpdateCategoryQuantity(int categoryId, int prevProductQuantity, int updatedProductquantity)
         {
             var category = _context.Categories.FirstOrDefault(c => c.Id == categoryId);
             if (category != null)
@@ -123,6 +123,8 @@ namespace ShoppingListWebAPI.Server.Controllers
                 category.CategoryQuantity = category.CategoryQuantity - prevProductQuantity + updatedProductquantity;
             }
         }
+
+
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
@@ -162,30 +164,25 @@ namespace ShoppingListWebAPI.Server.Controllers
                 {
                     return NotFound($"Product with Id = {id} not found");
                 }
-
                 if (dTOEdit.Name != null && dTOEdit.Name.Length > 0)
                 {
                     productToUpdate.Name = dTOEdit.Name;
                 }
-                if (dTOEdit.Quantity != 0)
+                if (dTOEdit.CategoryId != productToUpdate.CategoryId)
                 {
-                    var transaction = _context.Database.BeginTransaction();
-                    try
-                    {
-                        Console.WriteLine(productToUpdate.Quantity);
-                        int prevProductQuantity = productToUpdate.Quantity;
-                        productToUpdate.Quantity = dTOEdit.Quantity;
-                        UpdateCategory(productToUpdate.CategoryId, prevProductQuantity, dTOEdit.Quantity);
-                        transaction.Commit();
-                    }
-                    catch (Exception ex)
-                    {
-                        return BadRequest($"Failed to execute trnasction: {ex.Message}");
-                    }
-
+                    var prevCategoryId = productToUpdate.CategoryId;
+                    productToUpdate.CategoryId = dTOEdit.CategoryId;
+                    UpdateCategoryQuantity(prevCategoryId, productToUpdate.Quantity, 0);
+                    UpdateCategoryQuantity(productToUpdate.CategoryId, 0, productToUpdate.Quantity);
 
                 }
+                if (dTOEdit.Quantity != 0)
+                {
+                    int prevProductQuantity = productToUpdate.Quantity;
+                    productToUpdate.Quantity = dTOEdit.Quantity;
+                    UpdateCategoryQuantity(productToUpdate.CategoryId, prevProductQuantity, dTOEdit.Quantity);
 
+                }
                 await _context.SaveChangesAsync();
                 return Ok(productToUpdate);
             }

@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useTheme } from "@emotion/react";
 
 // eslint-disable-next-line react/prop-types
-function Categories({ category, onCategoryChange }) {
+function Categories({ label, category, onCategoryChange }) {
   const [options, setOptions] = useState([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -48,7 +48,7 @@ function Categories({ category, onCategoryChange }) {
   }, [open]);
 
   return (
-    <div style={{ direction: "rtl" }} className="App">
+    <div style={{ direction: "rtl" }}>
       <Autocomplete
         onOpen={() => {
           setOpen(true);
@@ -63,13 +63,14 @@ function Categories({ category, onCategoryChange }) {
         onChange={handleAutoCompleteChange}
         renderInput={(params) => (
           <TextField
+            margin="dense"
             sx={{
               minWidth: "300px",
               backgroundColor: "white",
-              borderRadius: theme.componentsDesign.borderRadius,
             }}
             {...params}
-            label="בחר קטגוריה"
+            fullWidth
+            label={label}
             InputProps={{
               ...params.InputProps,
               endAdornment: (

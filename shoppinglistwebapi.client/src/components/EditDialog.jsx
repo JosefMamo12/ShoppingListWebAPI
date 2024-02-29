@@ -6,38 +6,57 @@ import {
   TextField,
   DialogActions,
   Button,
+  Box,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../api";
 import { useDispatch } from "react-redux";
 import { changeTotalItemsByValue } from "../state/totalItemsSlice";
 import { fetchCategoriesProducts } from "../state/listSummarySlice";
+import Categories from "./Categories";
 
 const EditDialog = ({ productId, open, setOpen }) => {
+  const dispatch = useDispatch();
+  const [productName, setProudctName] = useState("");
+  const [productCategory, setProductCategory] = useState(0);
+  const [category, setCategory] = useState(0);
+  const [productQuantity, setProductQuantity] = useState(0);
+
   const handleClose = () => {
     setOpen(false);
     console.log(open);
   };
-
+  useEffect(() => {
+    const getCategory = async () => {
+      const response = await api.get(`api/Category/${productId}`);
+      setCategory(response.data);
+    };
+    getCategory();
+  }, [productId]);
   const handleSubmit = async () => {
-    if (productName != null || productQuantity != null) {
-      console.log(`Name: ${productName} Quantity: ${productQuantity} `);
+    if (
+      productName != null ||
+      productQuantity != null ||
+      productCategory != null
+    ) {
+      console.log(
+        `Name: ${productName} Quantity: ${productQuantity} CategoryId: ${JSON.stringify(
+          productCategory.id
+        )}`
+      );
       await api.put(`api/Product/${productId}`, {
         Name: productName,
         Quantity: productQuantity,
+        CategoryId: productCategory
+          ? JSON.stringify(productCategory.id)
+          : category.id,
       });
       dispatch(changeTotalItemsByValue(productQuantity));
-      const response = await api.get("api/Category/products");
       dispatch(fetchCategoriesProducts());
       handleClose();
     }
   };
   console.log("Render EditDialog");
-  console.log(productId);
-
-  const dispatch = useDispatch();
-  const [productName, setProudctName] = useState("");
-  const [productQuantity, setProductQuantity] = useState(0);
 
   return (
     <Dialog
@@ -75,6 +94,13 @@ const EditDialog = ({ productId, open, setOpen }) => {
           fullWidth
           variant="standard"
         />
+        <Box mt={2} display="flex" justifyContent="center">
+          <Categories
+            category={category}
+            label="ערוך קטוגריה"
+            onCategoryChange={setProductCategory}
+          />
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button sx={{ color: "black" }} onClick={handleClose}>

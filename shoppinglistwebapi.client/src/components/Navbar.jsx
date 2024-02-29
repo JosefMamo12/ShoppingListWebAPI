@@ -55,7 +55,7 @@ function Navbar(props) {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", width: "100%" }}>
       <CssBaseline />
       <AppBar
         dir="rtl"
@@ -76,7 +76,7 @@ function Navbar(props) {
           <Box sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
             <img src={logo} alt="Logo" width="250px" height="175px" />
           </Box>
-          <Box sx={{ display: { xs: "none", sm: "block" }}}>
+          <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
               <Button key={item.id}>
                 <Link to={item.link}>

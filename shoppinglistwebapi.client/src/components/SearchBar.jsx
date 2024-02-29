@@ -16,7 +16,7 @@ function SearchBar({ setCategories, setItems }) {
   const [text, setText] = useState("");
   const [category, setCategory] = useState("");
   const [addItemFlag, setAddItemFlag] = useState(false);
-    const theme = useTheme();
+  const theme = useTheme();
 
   const dispatch = useDispatch();
   const matches = useMediaQuery(theme.breakpoints.down("lg"));
@@ -60,12 +60,7 @@ function SearchBar({ setCategories, setItems }) {
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-
-    >
+    <Box display="flex" flexDirection="column" alignItems="center">
       <Box
         display="flex"
         alignItems="center"
@@ -86,7 +81,11 @@ function SearchBar({ setCategories, setItems }) {
             borderRadius: theme.componentsDesign.borderRadius,
           }}
         />
-        <Categories category={category} onCategoryChange={setCategory} />
+        <Categories
+          label="בחר קטגוריה"
+          category={category}
+          onCategoryChange={setCategory}
+        />
         <Button
           onClick={handleClick}
           variant="contained"
