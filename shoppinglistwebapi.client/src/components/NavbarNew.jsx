@@ -1,31 +1,30 @@
+import {
+  AppBar,
+  Box,
+  CssBaseline,
+  IconButton,
+  Toolbar,
+  Button,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  ListItemButton,
+  Drawer,
+} from "@mui/material";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
-import * as React from "react";
-import PropTypes from "prop-types";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 
-const drawerWidth = 0;
 const navItems = [
   { id: 1, link: "/", label: "עמוד בית" },
   { id: 2, link: "/summary", label: "סיכום הרשימה" },
 ];
 
-function Navbar(props) {
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+const NavbarNew = () => {
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -48,9 +47,6 @@ function Navbar(props) {
       </List>
     </Box>
   );
-
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <Box sx={{ display: "flex", width: "100%" }}>
@@ -91,32 +87,23 @@ function Navbar(props) {
           </Box>
         </Toolbar>
       </AppBar>
-      <Toolbar />
-      <nav>
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-      </nav>
-      <Toolbar />
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
+        sx={{
+          display: { xs: "block", sm: "none" },
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
+          },
+        }}
+      >
+        {drawer}
+      </Drawer>
     </Box>
   );
-}
-
-
-
-export default Navbar;
+};
+export default NavbarNew;

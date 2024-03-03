@@ -1,13 +1,13 @@
 import { Box } from "@mui/material";
 import React from "react";
-import Navbar from "../../components/Navbar";
+import NavbarNew from "../../components/NavbarNew";
 import { Outlet } from "react-router-dom";
 
 const Layout = () => {
   return (
-    <Box width="100%" height="100%">
+    <Box>
       <Box>
-        <Navbar />
+        <NavbarNew />
         <Outlet />
       </Box>
     </Box>

@@ -26,14 +26,12 @@ export default function SummaryTable({
   const [openEditDialogs, setOpenEditDialogs] = useState([]);
 
   const handleOpenClicked = (index) => {
-    // Open the edit dialog for the corresponding product
     const newOpenEditDialogs = [...openEditDialogs];
     newOpenEditDialogs[index] = true;
     setOpenEditDialogs(newOpenEditDialogs);
   };
 
   const handleCloseClicked = (index) => {
-    // Close the edit dialog for the corresponding product
     const newOpenEditDialogs = [...openEditDialogs];
     newOpenEditDialogs[index] = false;
     setOpenEditDialogs(newOpenEditDialogs);
