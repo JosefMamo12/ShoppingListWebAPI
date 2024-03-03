@@ -8,7 +8,7 @@ import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import api from "../api";
 import { IconButton, Stack } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import EditDialog from "./EditDialog";
 
 // Create rtl cache
@@ -17,10 +17,13 @@ const cacheRtl = createCache({
   stylisPlugins: [prefixer, rtlPlugin],
 });
 
-export default function SummaryTable({ categoryId, handleRemoveClick }) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [rows, setRows] = useState([]);
-  const [openEditDialogs, setOpenEditDialogs] = useState([]); // State to manage open/close state for edit dialogs
+export default function SummaryTable({
+  products,
+  categoryId,
+  handleRemoveClick,
+}) {
+  const [openEditDialogs, setOpenEditDialogs] = useState([]); // State to manage open/close state for edit dialogs\
+  const dispatch = useDispatch();
 
   const handleEditClick = (index) => {
     // Open the edit dialog for the corresponding product
@@ -62,12 +65,13 @@ export default function SummaryTable({ categoryId, handleRemoveClick }) {
         return (
           <Stack direction="row">
             <span>
-              <IconButton onClick={() => handleEditClick(params.row.id)}>
+              <IconButton onClick={() => handleEditClick(params.id)}>
                 <Edit />
                 <EditDialog
-                  productId={params.row.id}
-                  open={openEditDialogs[params.row.id] || false} // Pass the open state for the corresponding edit dialog
-                  setOpen={(isOpen) => handleCloseEditDialog(params.row.id)}
+                  categoryId={categoryId}
+                  productId={params.id}
+                  open={openEditDialogs[params.id] || false} // Pass the open state for the corresponding edit dialog
+                  setOpen={(isOpen) => handleCloseEditDialog(params.id)}
                 />
               </IconButton>
             </span>
@@ -82,15 +86,6 @@ export default function SummaryTable({ categoryId, handleRemoveClick }) {
     },
   ];
 
-  useEffect(() => {
-    const getDataTable = async () => {
-      setIsLoading(true);
-      const responose = await api.get(`api/Category/products/${categoryId}`);
-      setRows(responose.data);
-      setIsLoading(false);
-    };
-    getDataTable();
-  }, [categoryId]);
   // Inherit the theme from the docs site (dark/light mode)
   const existingTheme = useTheme();
 
@@ -105,7 +100,11 @@ export default function SummaryTable({ categoryId, handleRemoveClick }) {
     <CacheProvider value={cacheRtl}>
       <ThemeProvider theme={theme}>
         <div dir="rtl">
-          <DataGrid rows={rows} columns={columns} loading={isLoading} />
+          <DataGrid
+            key={categoryId}
+            rows={products}
+            columns={columns}
+          />
         </div>
       </ThemeProvider>
     </CacheProvider>

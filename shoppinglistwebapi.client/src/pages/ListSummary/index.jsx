@@ -35,7 +35,6 @@ const ListSummary = () => {
   useEffect(() => {
     dispatch(fetchCategoriesProducts({}));
     dispatch(fetchTotalItems({}));
-    console.log(categoriesProducts);
   }, [dispatch]);
 
   async function handleRemoveClick(product) {
@@ -47,7 +46,6 @@ const ListSummary = () => {
       console.log(error);
     }
   }
-
 
   return (
     <Box>
@@ -80,6 +78,7 @@ const ListSummary = () => {
               <SummaryTable
                 categoryId={category.id}
                 handleRemoveClick={handleRemoveClick}
+                products={category.products}
               />
               {/* <List>
                 {category.products.map((product, index) => {
