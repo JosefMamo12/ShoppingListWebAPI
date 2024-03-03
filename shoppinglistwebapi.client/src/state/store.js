@@ -5,7 +5,7 @@ import listSummarySlice from "./listSummarySlice";
 const store = configureStore({
   reducer: {
     totalItems: totalItemsSlice,
-    categoriesProducts: listSummarySlice,
+    listSummary: listSummarySlice,
   },
 });
 

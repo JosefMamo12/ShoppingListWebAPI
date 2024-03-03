@@ -15,9 +15,9 @@ import { changeTotalItemsByValue } from "../state/totalItemsSlice";
 import { fetchCategoriesProducts } from "../state/listSummarySlice";
 import Categories from "./Categories";
 
-const EditDialog = ({ productId, open, setOpen }) => {
+const EditDialog = ({productId, open, setOpen }) => {
   const dispatch = useDispatch();
-  const [productName, setProudctName] = useState("");
+  const [productName, setProductName] = useState("");
   const [productCategory, setProductCategory] = useState(0);
   const [category, setCategory] = useState(0);
   const [productQuantity, setProductQuantity] = useState(0);
@@ -75,7 +75,7 @@ const EditDialog = ({ productId, open, setOpen }) => {
         <TextField
           autoFocus
           margin="dense"
-          onChange={(e) => setProudctName(e.target.value)}
+          onChange={(e) => setProductName(e.target.value)}
           id="name"
           name="productName"
           label="שם המוצר"

@@ -9,18 +9,24 @@ export const fetchCategoriesProducts = createAsyncThunk(
   }
 );
 
+const initialState = {
+  products: [],
+  categoriesProducts: [],
+};
+
 const listSummarySlice = createSlice({
-  name: "categoriesProducts",
-  initialState: [],
+  name: "listSummary",
+  initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchCategoriesProducts.fulfilled, (state, action) => {
-      // Add user to the state array
-      return action.payload;
+      state.categoriesProducts = action.payload;
     });
   },
 });
 
-export const selectCategoriesProducts = (state) => state.categoriesProducts;
+// Define selectors
+export const selectCategoriesProducts = (state) =>
+  state.listSummary.categoriesProducts;
 
 export default listSummarySlice.reducer;
