@@ -5,9 +5,10 @@ import { useEffect } from "react";
 import { useTheme } from "@emotion/react";
 
 // eslint-disable-next-line react/prop-types
-function Categories({ label, category, onCategoryChange }) {
+function Categories({ label, category, onCategoryChange, key }) {
   const [options, setOptions] = useState([]);
   const [open, setOpen] = useState(false);
+  const [categoryHolder, setCategoryHolder] = useState(false);
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
 
@@ -50,6 +51,7 @@ function Categories({ label, category, onCategoryChange }) {
   return (
     <div style={{ direction: "rtl" }}>
       <Autocomplete
+        key={key}
         onOpen={() => {
           setOpen(true);
           setLoading(true);
@@ -70,7 +72,8 @@ function Categories({ label, category, onCategoryChange }) {
             }}
             {...params}
             fullWidth
-            label={label}
+            placeholder={category ? category.name : ""}
+            label={label ? label : ""}
             InputProps={{
               ...params.InputProps,
               endAdornment: (

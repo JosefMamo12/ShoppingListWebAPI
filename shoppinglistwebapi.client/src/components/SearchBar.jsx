@@ -16,6 +16,7 @@ function SearchBar({ setCategories, setItems }) {
   const [text, setText] = useState("");
   const [category, setCategory] = useState("");
   const [addItemFlag, setAddItemFlag] = useState(false);
+  const [key, setKey] = useState(0);
   const theme = useTheme();
 
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ function SearchBar({ setCategories, setItems }) {
       console.log("Please fill both fields");
       return;
     }
-
+    setKey(key + 1);
     setAddItemFlag(true);
 
     try {
@@ -53,6 +54,7 @@ function SearchBar({ setCategories, setItems }) {
         .then((data) => setCategories(data));
 
       setAddItemFlag(false);
+      setText("");
     } catch (error) {
       console.error("Error:", error);
       setAddItemFlag(false);
@@ -82,6 +84,7 @@ function SearchBar({ setCategories, setItems }) {
           }}
         />
         <Categories
+          key={key}
           label="בחר קטגוריה"
           category={category}
           onCategoryChange={setCategory}

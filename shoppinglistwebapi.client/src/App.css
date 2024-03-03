@@ -1,9 +1,11 @@
 ﻿.App{
     background-color: #fefefe;
-    width: 100%
+    width: 100;
+    margin-top: 150px;
 }
 body{
     margin: 0;
+    
 }
 .anta-regular {
     font-family: "Anta", sans-serif;

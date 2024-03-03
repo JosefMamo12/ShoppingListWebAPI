@@ -7,7 +7,7 @@ import {
   CircularProgress,
   Box,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch } from "react-redux";
@@ -22,7 +22,6 @@ const CustomListItem = ({ id, item, setItems, setCategories }) => {
 
   const handleAdd = async () => {
     setIsAdding(true);
-    // Add product
     try {
       await fetch("https://localhost:7263/api/Product/add", {
         method: "POST",
@@ -81,7 +80,7 @@ const CustomListItem = ({ id, item, setItems, setCategories }) => {
       <ListItemText
         primary={item.name}
         primaryTypographyProps={{ fontSize: "20px" }}
-        sx={{paddingRight: "10px"}}
+        sx={{ paddingRight: "10px" }}
       />
       <IconButton
         aria-label="add"

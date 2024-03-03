@@ -54,8 +54,8 @@ const NavbarNew = () => {
       <AppBar
         dir="rtl"
         component="nav"
-        sx={{ backgroundColor: "#384ac2" }}
-        position="sticky"
+        sx={{ backgroundColor: "#384ac2", top: 0 }}
+        position="fixed"
       >
         <Toolbar>
           <IconButton

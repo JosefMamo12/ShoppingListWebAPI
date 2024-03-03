@@ -23,18 +23,14 @@ export default function SummaryTable({
   handleRemoveClick,
 }) {
   const dispatch = useDispatch();
-  const [openEditDialogs, setOpenEditDialogs] = useState([]);
+  const [openEditDialogs, setOpenEditDialogs] = useState(false);
+  const [productEdit, setProductEdit] = useState([]);
 
-  const handleOpenClicked = (index) => {
-    const newOpenEditDialogs = [...openEditDialogs];
-    newOpenEditDialogs[index] = true;
-    setOpenEditDialogs(newOpenEditDialogs);
-  };
-
-  const handleCloseClicked = (index) => {
-    const newOpenEditDialogs = [...openEditDialogs];
-    newOpenEditDialogs[index] = false;
-    setOpenEditDialogs(newOpenEditDialogs);
+  // const handleOpenClicked = (index) => {
+  //   setOpenEditDialogs(true);
+  // };
+  const toggleIsOpen = () => {
+    setOpenEditDialogs(!openEditDialogs);
   };
 
   const columns = [
@@ -60,11 +56,12 @@ export default function SummaryTable({
       width: 150,
 
       renderCell: (params) => {
+        //console.log("sdsdsdsd", params.row);
         return (
           <Fragment>
             <Stack direction="row">
               <span>
-                <IconButton onClick={() => handleOpenClicked(params.id)}>
+                <IconButton onClick={() => openForEdit(params.row)}>
                   <Edit />
                 </IconButton>
               </span>
@@ -74,17 +71,17 @@ export default function SummaryTable({
                 </IconButton>
               </span>
             </Stack>
-            <EditDialog
-              productId={params.id}
-              open={openEditDialogs[params.id] || false}
-              handleClose={() => handleCloseClicked(params.id)}
-            />
           </Fragment>
         );
       },
     },
   ];
 
+  function openForEdit(id) {
+    setProductEdit(id);
+    toggleIsOpen();
+    console.log(productEdit);
+  }
   // Inherit the theme from the docs site (dark/light mode)
   const existingTheme = useTheme();
 
@@ -101,6 +98,16 @@ export default function SummaryTable({
         <div dir="rtl">
           <DataGrid key={categoryId} rows={products} columns={columns} />
         </div>
+        {openEditDialogs == false ? (
+          <></>
+        ) : (
+          <EditDialog
+            product={productEdit}
+            open={openEditDialogs || false}
+            z
+            handleClose={() => toggleIsOpen()}
+          />
+        )}
       </ThemeProvider>
     </CacheProvider>
   );

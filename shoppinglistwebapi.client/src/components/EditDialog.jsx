@@ -15,20 +15,19 @@ import { changeTotalItemsByValue } from "../state/totalItemsSlice";
 import { fetchCategoriesProducts } from "../state/listSummarySlice";
 import Categories from "./Categories";
 
-const EditDialog = ({ open, productId, handleClose }) => {
+const EditDialog = ({ open, product, handleClose }) => {
   const dispatch = useDispatch();
   const [productName, setProductName] = useState("");
   const [productCategory, setProductCategory] = useState(0);
   const [category, setCategory] = useState(0);
   const [productQuantity, setProductQuantity] = useState(0);
-
   useEffect(() => {
     const getCategory = async () => {
-      const response = await api.get(`api/Category/${productId}`);
+      const response = await api.get(`api/Category/${product.id}`);
       setCategory(response.data);
     };
     getCategory();
-  }, [productId]);
+  }, [product]);
   const handleSubmit = async () => {
     if (
       productName != null ||
@@ -40,7 +39,7 @@ const EditDialog = ({ open, productId, handleClose }) => {
           productCategory.id
         )}`
       );
-      await api.put(`api/Product/${productId}`, {
+      await api.put(`api/Product/${product.id}`, {
         Name: productName,
         Quantity: productQuantity,
         CategoryId: productCategory
@@ -49,14 +48,13 @@ const EditDialog = ({ open, productId, handleClose }) => {
       });
       dispatch(changeTotalItemsByValue(productQuantity));
       dispatch(fetchCategoriesProducts());
-      handleClose();
+      handleClose(product.id);
     }
   };
-  console.log("Render EditDialog");
 
   return (
     <Dialog
-      key={productId}
+      key={product}
       dir="rtl"
       open={open}
       onClose={handleClose}
@@ -74,8 +72,8 @@ const EditDialog = ({ open, productId, handleClose }) => {
           margin="dense"
           onChange={(e) => setProductName(e.target.value)}
           id="name"
+          defaultValue={product.name}
           name="productName"
-          label="שם המוצר"
           type="string"
           fullWidth
           variant="standard"
@@ -83,10 +81,10 @@ const EditDialog = ({ open, productId, handleClose }) => {
         <TextField
           autoFocus
           margin="dense"
+          defaultValue={product.quantity}
           id="quantity"
           onChange={(e) => setProductQuantity(e.target.value)}
           name="productQuantity"
-          label="כמות המוצר"
           type="number"
           fullWidth
           variant="standard"
@@ -94,7 +92,6 @@ const EditDialog = ({ open, productId, handleClose }) => {
         <Box mt={2} display="flex" justifyContent="center">
           <Categories
             category={category}
-            label="ערוך קטוגריה"
             onCategoryChange={setProductCategory}
           />
         </Box>
