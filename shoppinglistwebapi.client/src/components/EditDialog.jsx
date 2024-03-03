@@ -15,17 +15,13 @@ import { changeTotalItemsByValue } from "../state/totalItemsSlice";
 import { fetchCategoriesProducts } from "../state/listSummarySlice";
 import Categories from "./Categories";
 
-const EditDialog = ({productId, open, setOpen }) => {
+const EditDialog = ({ open, productId, handleClose }) => {
   const dispatch = useDispatch();
   const [productName, setProductName] = useState("");
   const [productCategory, setProductCategory] = useState(0);
   const [category, setCategory] = useState(0);
   const [productQuantity, setProductQuantity] = useState(0);
 
-  const handleClose = () => {
-    setOpen(false);
-    console.log(open);
-  };
   useEffect(() => {
     const getCategory = async () => {
       const response = await api.get(`api/Category/${productId}`);
@@ -60,6 +56,7 @@ const EditDialog = ({productId, open, setOpen }) => {
 
   return (
     <Dialog
+      key={productId}
       dir="rtl"
       open={open}
       onClose={handleClose}

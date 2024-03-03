@@ -1,25 +1,18 @@
 import {
   Box,
-  IconButton,
   Typography,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-  CircularProgress,
+
 } from "@mui/material";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import api from "../../api";
 import { useTheme } from "@emotion/react";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   changeTotalItemsByValue,
   fetchTotalItems,
   selectTotalItems,
 } from "../../state/totalItemsSlice";
-import EditDialog from "../../components/EditDialog";
 import {
   fetchCategoriesProducts,
   selectCategoriesProducts,

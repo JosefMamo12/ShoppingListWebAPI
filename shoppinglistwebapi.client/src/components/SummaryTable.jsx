@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { prefixer } from "stylis";
 import rtlPlugin from "stylis-plugin-rtl";
 import { DataGrid, arSD, heIL } from "@mui/x-data-grid";
@@ -22,17 +22,17 @@ export default function SummaryTable({
   categoryId,
   handleRemoveClick,
 }) {
-  const [openEditDialogs, setOpenEditDialogs] = useState([]); // State to manage open/close state for edit dialogs\
   const dispatch = useDispatch();
+  const [openEditDialogs, setOpenEditDialogs] = useState([]);
 
-  const handleEditClick = (index) => {
+  const handleOpenClicked = (index) => {
     // Open the edit dialog for the corresponding product
     const newOpenEditDialogs = [...openEditDialogs];
     newOpenEditDialogs[index] = true;
     setOpenEditDialogs(newOpenEditDialogs);
   };
 
-  const handleCloseEditDialog = (index) => {
+  const handleCloseClicked = (index) => {
     // Close the edit dialog for the corresponding product
     const newOpenEditDialogs = [...openEditDialogs];
     newOpenEditDialogs[index] = false;
@@ -60,27 +60,28 @@ export default function SummaryTable({
       field: "edit",
       headerName: "פעולות",
       width: 150,
-      dir: "ltr",
+
       renderCell: (params) => {
         return (
-          <Stack direction="row">
-            <span>
-              <IconButton onClick={() => handleEditClick(params.id)}>
-                <Edit />
-                <EditDialog
-                  categoryId={categoryId}
-                  productId={params.id}
-                  open={openEditDialogs[params.id] || false} // Pass the open state for the corresponding edit dialog
-                  setOpen={(isOpen) => handleCloseEditDialog(params.id)}
-                />
-              </IconButton>
-            </span>
-            <span>
-              <IconButton onClick={() => handleRemoveClick(params.row)}>
-                <Delete />
-              </IconButton>
-            </span>
-          </Stack>
+          <Fragment>
+            <Stack direction="row">
+              <span>
+                <IconButton onClick={() => handleOpenClicked(params.id)}>
+                  <Edit />
+                </IconButton>
+              </span>
+              <span>
+                <IconButton onClick={() => handleRemoveClick(params.row)}>
+                  <Delete />
+                </IconButton>
+              </span>
+            </Stack>
+            <EditDialog
+              productId={params.id}
+              open={openEditDialogs[params.id] || false}
+              handleClose={() => handleCloseClicked(params.id)}
+            />
+          </Fragment>
         );
       },
     },
@@ -100,11 +101,7 @@ export default function SummaryTable({
     <CacheProvider value={cacheRtl}>
       <ThemeProvider theme={theme}>
         <div dir="rtl">
-          <DataGrid
-            key={categoryId}
-            rows={products}
-            columns={columns}
-          />
+          <DataGrid key={categoryId} rows={products} columns={columns} />
         </div>
       </ThemeProvider>
     </CacheProvider>
