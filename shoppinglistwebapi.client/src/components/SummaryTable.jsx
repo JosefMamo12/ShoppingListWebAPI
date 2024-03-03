@@ -57,7 +57,7 @@ export default function SummaryTable({ categoryId, handleRemoveClick }) {
       field: "edit",
       headerName: "פעולות",
       width: 150,
-      align: "left",
+      dir: "ltr",
       renderCell: (params) => {
         return (
           <Stack direction="row">
