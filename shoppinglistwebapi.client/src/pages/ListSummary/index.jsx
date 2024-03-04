@@ -1,10 +1,6 @@
-import {
-  Box,
-  Typography,
-
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React, { useEffect } from "react";
-import api from "../../api";
+import api, { deleteProduct } from "../../api";
 import { useTheme } from "@emotion/react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -32,7 +28,7 @@ const ListSummary = () => {
 
   async function handleRemoveClick(product) {
     try {
-      await api.delete(`api/Product/${product.id}`);
+      await deleteProduct(product.id);
       dispatch(changeTotalItemsByValue(-product.quantity));
       dispatch(fetchCategoriesProducts());
     } catch (error) {
@@ -73,33 +69,6 @@ const ListSummary = () => {
                 handleRemoveClick={handleRemoveClick}
                 products={category.products}
               />
-              {/* <List>
-                {category.products.map((product, index) => {
-                  return (
-                    <ListItem key={product.id} disablePadding>
-                      <Box width="100%">
-                        <ListItemText primary={product.name} />
-                      </Box>
-                      <Box width="100%" marginLeft={7}>
-                        <ListItemText primary={product.quantity} />
-                      </Box>
-                      <Box display="flex">
-                        <IconButton onClick={() => handleEditClick(index)}>
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton onClick={() => handleRemoveClick(product)}>
-                          <DeleteIcon />
-                        </IconButton>
-                        <EditDialog
-                          productId={product.id}
-                          open={openEditDialogs[index] || false} // Pass the open state for the corresponding edit dialog
-                          setOpen={(isOpen) => handleCloseEditDialog(index)}
-                        />
-                      </Box>
-                    </ListItem>
-                  );
-                })}
-              </List> */}
             </Box>
           ))
       )}

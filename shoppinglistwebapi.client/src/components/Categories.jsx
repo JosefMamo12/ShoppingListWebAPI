@@ -3,12 +3,12 @@ import React, { Fragment, useState, useCallback } from "react";
 import { Autocomplete, TextField, CircularProgress } from "@mui/material";
 import { useEffect } from "react";
 import { useTheme } from "@emotion/react";
+import { getCategories } from "../api";
 
 // eslint-disable-next-line react/prop-types
 function Categories({ label, category, onCategoryChange, key }) {
   const [options, setOptions] = useState([]);
   const [open, setOpen] = useState(false);
-  const [categoryHolder, setCategoryHolder] = useState(false);
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
 
@@ -25,10 +25,8 @@ function Categories({ label, category, onCategoryChange, key }) {
 
     (async () => {
       try {
-        const response = await fetch("https://localhost:7263/api/Category");
-        const data = await response.json();
         if (active) {
-          setOptions(data);
+          setOptions(await getCategories());
         }
       } catch (error) {
         console.error("Error fetching categories:", error);

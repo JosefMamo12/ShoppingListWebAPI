@@ -1,16 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../api";
+import api, { getCategoriesProducts } from "../api";
 
 export const fetchCategoriesProducts = createAsyncThunk(
   "category/categoriesProducts",
   async () => {
-    const response = await api.get("api/Category/products");
-    return response.data;
+    return await getCategoriesProducts();
   }
 );
 
 const initialState = {
-  products: [],
   categoriesProducts: [],
 };
 

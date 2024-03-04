@@ -11,6 +11,7 @@ import {
 import { useDispatch } from "react-redux";
 import { incrementTotal } from "../state/totalItemsSlice";
 import { useTheme } from "@emotion/react";
+import { addProduct, getCategories, getProducts } from "../api";
 
 function SearchBar({ setCategories, setItems }) {
   const [text, setText] = useState("");
@@ -31,27 +32,11 @@ function SearchBar({ setCategories, setItems }) {
 
     try {
       // Add product
-      await fetch("https://localhost:7263/api/Product/add", {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          CategoryId: category.id,
-          ProductName: text,
-        }),
-      });
+      await addProduct(text, category.id);
       dispatch(incrementTotal());
-
       // Fetch updated list of products
-      await fetch("https://localhost:7263/api/Product")
-        .then((response) => response.json())
-        .then((data) => setItems(data));
-
-      await fetch("https://localhost:7263/api/Category")
-        .then((response) => response.json())
-        .then((data) => setCategories(data));
+      setItems(await getProducts());
+      setCategories(await getCategories());
 
       setAddItemFlag(false);
       setText("");

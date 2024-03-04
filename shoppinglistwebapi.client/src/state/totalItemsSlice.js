@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../api";
+import { getTotalItems } from "../api";
 
 const initialState = {
   value: 0,
@@ -9,8 +9,7 @@ const initialState = {
 export const fetchTotalItems = createAsyncThunk(
   "items/totalItems",
   async () => {
-    const response = await api.get("api/Category/sum");
-    return response.data;
+    return await getTotalItems();
   }
 );
 

@@ -26,9 +26,6 @@ export default function SummaryTable({
   const [openEditDialogs, setOpenEditDialogs] = useState(false);
   const [productEdit, setProductEdit] = useState([]);
 
-  // const handleOpenClicked = (index) => {
-  //   setOpenEditDialogs(true);
-  // };
   const toggleIsOpen = () => {
     setOpenEditDialogs(!openEditDialogs);
   };
