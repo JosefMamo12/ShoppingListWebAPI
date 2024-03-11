@@ -1,10 +1,14 @@
-﻿using ShoppingListWebAPI.Server.Models;
+﻿using ShoppingListWebAPI.Server.DTOs;
+using ShoppingListWebAPI.Server.Models;
 
 namespace ShoppingListWebAPI.Server.Data
 {
-    public interface ICategoryRepo: IShoppingListRepo<Category>
+    public interface ICategoryRepo
     {
+        bool SaveChanges();
         IEnumerable<Category> GetAllCategories();
-        IEnumerable<Category> GetCategoriesProducts();
+        int GetAllCategoriesQuantity();
+        Category? GetCategory(int id);
     }
+
 }

@@ -9,5 +9,7 @@ namespace ShoppingListWebAPI.Server.Data
         void AddProduct(Product p);
         void SubtractProduct(Product p);
         bool SaveChanges();
+        Product? UpdateProduct(int id, Product product);
+        void DeleteProduct(int id);
     }
 }

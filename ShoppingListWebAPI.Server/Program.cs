@@ -13,11 +13,13 @@ internal class Program
         // SQL SERVER WITH THE RIGHT CONNECTION STRING AS A SECRET.
 
         builder.Services.AddDbContext<ShoppingListContext>
-            (options => options.UseSqlServer(builder.Configuration.GetConnectionString("ShoppingList"))
-            .LogTo((msg) => Console.WriteLine(msg), LogLevel.Information));
+            (options => options.UseSqlServer(builder.Configuration.GetConnectionString("ShoppingList")));
+        // .LogTo((msg) => Console.WriteLine(msg), LogLevel.Information));
 
-
+        builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+        builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
+        builder.Services.AddScoped<IProductRepo, ProductRepo>();
         builder.Services.AddControllers().AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;

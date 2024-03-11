@@ -10,8 +10,5 @@ namespace ShoppingListWebAPI.Server.Models
         public string Name { get; set; } = null!;
         public int CategoryQuantity { get; set; }
         public virtual ICollection<Product> Products { get; } = new List<Product>();
-
-        public void AddProduct (Product product) => Products.Add(product);
-
     }
 }

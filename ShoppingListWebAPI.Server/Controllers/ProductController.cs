@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
-using NuGet.Protocol;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using ShoppingListWebAPI.Server.Data;
 using ShoppingListWebAPI.Server.DTOs;
 using ShoppingListWebAPI.Server.Models;
@@ -12,39 +10,47 @@ namespace ShoppingListWebAPI.Server.Controllers
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
-        private readonly ShoppingListContext _context;
+        private readonly IProductRepo _productRepo;
+        private readonly IMapper _mapper;
 
-        public ProductController(ShoppingListContext context)
+        public ProductController(IProductRepo productRepo, IMapper mapper)
         {
-            _context = context;
+            _productRepo = productRepo;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> Products()
+        public ActionResult<IEnumerable<Product>> Products()
         {
-            return await _context.Products.ToListAsync();
+            return Ok(_productRepo.GetProducts());
         }
         [Route("add")]
         [HttpPost]
-        public async Task<ActionResult> AddProduct(DTOProduct p)
+        public ActionResult<Product> AddProduct(ProductCreateDto productCreateDto)
         {
             try
             {
-                await AddProcess(p);
+                Console.WriteLine("---> Adding Products");
+                Product product = _mapper.Map<Product>(productCreateDto);
+                _productRepo.AddProduct(product);
+                _productRepo.SaveChanges();
                 return Ok("Product Updated");
             }
             catch (Exception ex)
             {
+                Console.WriteLine("---> Failed to adding product");
                 return BadRequest(ex.Message);
             }
         }
         [Route("subtract")]
         [HttpPost]
-        public async Task<ActionResult> SubtractProduct(DTOProduct p)
+        public ActionResult SubtractProduct(ProductCreateDto productCreateDto)
         {
             try
             {
-                await SubtractProcess(p);
+                Product product = _mapper.Map<Product>(productCreateDto);
+                _productRepo.SubtractProduct(product);
+                _productRepo.SaveChanges();
                 return Ok("Product Updated");
             }
             catch (Exception ex)
@@ -52,100 +58,15 @@ namespace ShoppingListWebAPI.Server.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        private async Task AddProcess(DTOProduct product)
-        {
-            var transaction = _context.Database.BeginTransaction();
-            try
-            {
-                var newItem = _context.Products.FirstOrDefault(e => e.Name == product.ProductName);
-                if (newItem != null)
-                {
-                    newItem.Quantity++;
-                    UpdateCategory(newItem.CategoryId);
-                }
-                else
-                {
-                    Product newProduct = DTOProduct.ToEntity(product);
-                    _context.Products.Add(newProduct);
-                    UpdateCategory(newProduct.CategoryId);
-                }
-                await _context.SaveChangesAsync();
-                transaction.Commit();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-        }
-        private async Task SubtractProcess(DTOProduct dTOProduct)
-        {
-            var transaction = _context.Database.BeginTransaction();
-            try
-            {
-                var product = _context.Products.FirstOrDefault(p => p.Name == dTOProduct.ProductName);
-                if (product != null)
-                {
-                    product.Quantity--;
-                    var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == product.CategoryId);
-                    if (category != null)
-                    {
-                        category.CategoryQuantity--;
-                    }
-                    if (product.Quantity == 0)
-                    {
-                        _context.Products.Remove(product);
-                    }
-                }
-                await _context.SaveChangesAsync();
-                transaction.Commit();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
-
-        private void UpdateCategory(int categoryId)
-        {
-            var category = _context.Categories.FirstOrDefault(c => c.Id == categoryId);
-            if (category != null)
-            {
-                category.CategoryQuantity++;
-            }
-        }
-
-        private void UpdateCategoryQuantity(int categoryId, int prevProductQuantity, int updatedProductquantity)
-        {
-            var category = _context.Categories.FirstOrDefault(c => c.Id == categoryId);
-            if (category != null)
-            {
-                category.CategoryQuantity = category.CategoryQuantity - prevProductQuantity + updatedProductquantity;
-            }
-        }
-
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id)
+        public ActionResult Delete(int id)
         {
             try
             {
-                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
-                if (product != null)
-                {
-                    var transaction = _context.Database.BeginTransaction();
-                    _context.Products.Remove(product);
-                    var category = _context.Categories.FirstOrDefault(c => c.Id == product.CategoryId);
-                    if (category != null)
-                    {
-                        category.CategoryQuantity -= product.Quantity;
-                    }
-                    transaction.Commit();
-                    _context.SaveChanges();
-                    return Ok("Successed remove product");
-                }
-
-                return Ok("Not found the product");
+                _productRepo.DeleteProduct(id);
+                _productRepo.SaveChanges();
+                return Ok("Successed remove product");
             }
             catch (Exception ex)
             {
@@ -154,46 +75,25 @@ namespace ShoppingListWebAPI.Server.Controllers
 
         }
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Product>> UpdateProduct(int id, DTOEdit dTOEdit)
+        public ActionResult<Product> UpdateProduct(int id, ProductCreateDto productCreateDto)
         {
             try
             {
 
-                var productToUpdate = _context.Products.FirstOrDefault(p => p.Id == id);
-                if (productToUpdate == null)
-                {
-                    return NotFound($"Product with Id = {id} not found");
-                }
-                if (dTOEdit.Name != null && dTOEdit.Name.Length > 0)
-                {
-                    productToUpdate.Name = dTOEdit.Name;
-                }
-                if (dTOEdit.CategoryId != productToUpdate.CategoryId)
-                {
-                    var prevCategoryId = productToUpdate.CategoryId;
-                    productToUpdate.CategoryId = dTOEdit.CategoryId;
-                    UpdateCategoryQuantity(prevCategoryId, productToUpdate.Quantity, 0);
-                    UpdateCategoryQuantity(productToUpdate.CategoryId, 0, productToUpdate.Quantity);
-
-                }
-                if (dTOEdit.Quantity != 0)
-                {
-                    int prevProductQuantity = productToUpdate.Quantity;
-                    productToUpdate.Quantity = dTOEdit.Quantity;
-                    UpdateCategoryQuantity(productToUpdate.CategoryId, prevProductQuantity, dTOEdit.Quantity);
-
-                }
-                await _context.SaveChangesAsync();
-                return Ok(productToUpdate);
+                Console.WriteLine($"ProductCreateDto Name={productCreateDto.Name}, Quantity={productCreateDto.Quantity}, CategoryId={productCreateDto.CategoryId}");
+                Product editProduct = _mapper.Map<Product>(productCreateDto);
+                Console.WriteLine(editProduct);
+                var product = _productRepo.UpdateProduct(id, editProduct);
+                var rValue = _mapper.Map<ProductReadDto>(product);
+                _productRepo.SaveChanges();
+                return Ok(rValue);
             }
-            catch (Exception)
+            catch (Exception error)
             {
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError,
-                        "Error updating data");
-                }
+                Console.WriteLine("---> Error while trying to update product");
+                return BadRequest($"Failed to update product with id: {id}, Error: {error.Message}");
             }
         }
-    }
 
+    }
 }

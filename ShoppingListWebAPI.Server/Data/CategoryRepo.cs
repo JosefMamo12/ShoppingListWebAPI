@@ -16,13 +16,19 @@ namespace ShoppingListWebAPI.Server.Data
 
         public IEnumerable<Category> GetAllCategories()
         {
-            return _context.Categories.ToList();
+            return _context.Categories.Include(p => p.Products).ToList();
         }
 
         public int GetAllCategoriesQuantity()
         {
             var sum = _context.Categories.Sum(c => c.CategoryQuantity);
             return sum;
+        }
+
+        public Category? GetCategory(int id)
+        {
+            var productCategory = _context.Products.Where(p => p.Id == id).Select(p => p.Category).FirstOrDefault();
+            return productCategory;
         }
 
         public bool SaveChanges()

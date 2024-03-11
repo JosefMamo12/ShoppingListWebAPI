@@ -13,6 +13,10 @@ namespace ShoppingListWebAPI.Server.Models
         public int Quantity { get; set; }
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; } = null!;
+        public override string ToString()
+        {
+            return $"Name= {Name}, Quantity= {Quantity}, CategoryId= {CategoryId}";
+        }
 
     }
 }

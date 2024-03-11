@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using ShoppingListWebAPI.Server.Data;
 using ShoppingListWebAPI.Server.DTOs;
 using ShoppingListWebAPI.Server.Models;
@@ -10,86 +10,44 @@ namespace ShoppingListWebAPI.Server.Controllers
     [Route("/api/[controller]")]
     public class CategoryController : ControllerBase
     {
-        private readonly ShoppingListContext _context;
-        public CategoryController(ShoppingListContext context)
+        private readonly IMapper _mapper;
+        private readonly ICategoryRepo _categoryRepo;
+
+        public CategoryController(ICategoryRepo categoryRepo, IMapper mapper)
         {
-            _context = context;
+            _mapper = mapper;
+            _categoryRepo = categoryRepo;
         }
         [HttpGet]
-
-        public async Task<ActionResult<Category>> Index()
+        public ActionResult<CategoryReadDto> Index()
         {
-            try
-            {
-                var Categories = await _context.Categories.ToListAsync();
-                return Ok(Categories);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+
+            Console.WriteLine("--> Get All Categories...");
+            var categoriesItems = _categoryRepo.GetAllCategories();
+            return Ok(_mapper.Map<IEnumerable<CategoryReadDto>>(categoriesItems));
+
         }
+
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Category>> GetCategoryByProductID(int id)
+        public ActionResult<CategoryReadDto> GetCategory(int id)
         {
             try
             {
-                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
-                if (product == null)
-                {
-                    return NotFound($"Product with Id = {id} not found");
-                }
-                var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == product.CategoryId);
-                return Ok(category);
+                CategoryReadDto categoryReadDto = _mapper.Map<CategoryReadDto>(_categoryRepo.GetCategory(id));
+                return Ok(categoryReadDto);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return BadRequest(ex.Message);
+                return BadRequest($"---> Failed to retrive Category from db, error: {e.Message}");
             }
         }
-
-        [HttpGet]
-        [Route("products")]
-        public async Task<ActionResult<Category>> CategoriesProducts()
-        {
-            try
-            {
-                var Categories = await _context.Categories.Select(c => new { c.Id, c.Name, c.Products }).ToListAsync();
-                return Ok(Categories);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpGet]
-        [Route("products/{id:int}")]
-        public async Task<ActionResult<DTOListProduct>> ProductsByCategoy(int id)
-        {
-            try
-            {
-                List<DTOListProduct> dTOListProducts = [];
-                var products = await _context.Categories.Where(c => c.Id == id).SelectMany(c => c.Products).ToListAsync();
-                foreach (var product in products)
-                {
-                    dTOListProducts.Add(new DTOListProduct { Id = product.Id, Name = product.Name, Quantity = product.Quantity });
-                }
-                return Ok(dTOListProducts);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpGet]
         [Route("sum")]
         public ActionResult<int> CategoriesSum()
         {
             try
             {
-                var sum = _context.Categories.Sum(c => c.CategoryQuantity);
-                return Ok(sum);
+                return Ok(_categoryRepo.GetAllCategoriesQuantity());
             }
             catch (Exception ex)
             {

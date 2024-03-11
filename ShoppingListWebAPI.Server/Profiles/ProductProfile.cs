@@ -11,6 +11,7 @@ namespace ShoppingListWebAPI.Server.Profiles
             //Source - Target
             CreateMap<Product, ProductReadDto>();
             CreateMap<ProductCreateDto, Product>();
+
         }
     }
 }

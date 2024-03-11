@@ -1,16 +1,16 @@
-﻿using ShoppingListWebAPI.Server.Models;
+﻿
+using ShoppingListWebAPI.Server.Models;
 
 namespace ShoppingListWebAPI.Server.DTOs
 {
-    public class DTOProduct
+    public class ProductReadDto
     {
+        public string? ProductName { get; set; }
         public int CategoryId { get; set; }
-        public string ProductName { get; set; } = null!;
+        public Category? Category { get; set; }
+        public int Quantity { get; set; }
 
-        public static Product ToEntity(DTOProduct dTOProduct)
-        {
-            return new Product() { Name = dTOProduct.ProductName, CategoryId = dTOProduct.CategoryId, Quantity = 1 };
-        }
+
     }
 
 
